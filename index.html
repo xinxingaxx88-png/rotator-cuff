@@ -970,10 +970,8 @@ if (isDesktop) {
   document.querySelector('.result-sheet').style.maxWidth = '100%';
 }
 
-// Clone cards to mobile
-if (isDesktop) {
-  document.getElementById('mobileBody').innerHTML = document.getElementById('appBody').innerHTML;
-}
+// Clone cards to mobile (always, regardless of platform)
+document.getElementById('mobileBody').innerHTML = document.getElementById('appBody').innerHTML;
 
 // Toggle groups
 document.querySelectorAll('.toggle-group').forEach(group => {

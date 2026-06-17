@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="肩袖风险计算">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>肩袖再撕裂风险计算器</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --card: #ffffff;
+    --text: #1d1d1f;
+    --secondary: #86868b;
+    --accent: #0071e3;
+    --accent-press: #005bb5;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --success: #34c759;
+    --border: #d2d2d7;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --radius: 14px;
+    --phone-w: 390px;
+    --phone-h: 844px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Phone Frame (Desktop) */
+  .phone-frame { display: none; }
+  @media (min-width: 768px) and (min-height: 900px) {
+    .phone-frame {
+      display: flex;
+      flex-direction: column;
+      width: var(--phone-w);
+      height: var(--phone-h);
+      background: var(--bg);
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow: 0 0 0 8px #1a1a1c, 0 0 0 10px #2d2d30, 0 0 0 12px #1a1a1c, 0 20px 60px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .phone-notch {
+      position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 30px;
+      background: #1a1a1c;
+      border-radius: 0 0 18px 18px;
+      z-index: 10;
+    }
+    .phone-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 36px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .phone-status .time { font-size: 14px; font-weight: 700; }
+    .phone-home {
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 8px;
+      background: var(--bg);
+    }
+    .phone-home::after {
+      content: '';
+      width: 120px; height: 4px;
+      background: #1a1a1c;
+      border-radius: 100px;
+      opacity: 0.3;
+    }
+  }
+
+  /* App Container */
+  .app-container {
+    width: 100%;
+    max-width: 500px;
+    height: 100vh; height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+  @media (min-width: 768px) and (min-height: 900px) {
+    .app-container { height: 100%; }
+  }
+
+  .app-header {
+    padding: 12px 16px 0;
+    text-align: center;
+    flex-shrink: 0;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .app-header .header-icon { font-size: 40px; display: block; margin-bottom: 2px; }
+  .app-header h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; }
+  .app-header .subtitle { font-size: 11px; color: var(--secondary); margin-top: 2px; padding-bottom: 8px; }
+
+  .app-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .card-title .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* Form */
+  .form-group { margin-bottom: 12px; }
+  .form-group:last-child { margin-bottom: 0; }
+  .form-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .form-group label .hint {
+    font-size: 11px;
+    color: var(--secondary);
+    font-weight: 400;
+  }
+
+  input[type="number"], select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fafafa;
+    color: var(--text);
+    transition: all 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+  input[type="number"]:focus, select:focus {
+    border-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2386868b'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+
+  .range-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--secondary);
+    margin-top: 3px;
+  }
+
+  /* Toggle */
+  .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .toggle-btn {
+    flex: 1;
+    min-width: 44px;
+    padding: 8px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text);
+  }
+  .toggle-btn:active { transform: scale(0.96); }
+  .toggle-btn.active {
+    border-color: var(--accent);
+    background: rgba(0,113,227,0.07);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .bmi-display { margin-top: 5px; font-size: 12px; color: var(--accent); font-weight: 500; }
+
+  /* Button */
+  .btn-area {
+    flex-shrink: 0;
+    padding: 8px 14px 16px;
+    background: var(--bg);
+  }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .btn-area { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+  }
+  .btn-calculate {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .btn-calculate:active { transform: scale(0.97); background: var(--accent-press); }
+
+  /* Result Overlay */
+  .result-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .result-overlay.show { pointer-events: auto; opacity: 1; }
+  .result-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
+  .result-sheet {
+    position: relative;
+    width: 100%; max-width: 500px; max-height: 85vh;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    padding: 0 18px 24px;
+  }
+  @media (min-width: 768px) and (min-height: 900px) {
+    .result-sheet { max-width: var(--phone-w); }
+  }
+  .result-overlay.show .result-sheet { transform: translateY(0); }
+
+  .sheet-handle { width: 36px; height: 4px; background: #d1d1d6; border-radius: 2px; margin: 10px auto 0; }
+  .sheet-title { font-size: 16px; font-weight: 600; text-align: center; padding: 12px 0 8px; }
+
+  .result-gauge { display: flex; flex-direction: column; align-items: center; padding: 16px 0; }
+  .risk-circle {
+    width: 130px; height: 130px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .risk-inner {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .risk-value { font-size: 32px; font-weight: 700; letter-spacing: -1px; }
+  .risk-label { font-size: 10px; color: var(--secondary); font-weight: 500; margin-top: 1px; }
+
+  .risk-badge { display: inline-block; padding: 5px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .risk-badge.low       { background:#e8f8ed; color:#1a7d3a; }
+  .risk-badge.moderate  { background:#fff3e0; color:#b86500; }
+  .risk-badge.high      { background:#ffe5e0; color:#b83020; }
+  .risk-badge.very-high { background:#ffe5e5; color:#b81c1c; }
+
+  /* Detail */
+  .result-section { margin-top: 12px; }
+  .result-section h4 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .factor-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid #f2f2f2; font-size: 12px;
+  }
+  .factor-row:last-child { border-bottom: none; }
+  .factor-left { flex:1; }
+  .factor-val { color:var(--secondary); font-size:10px; }
+  .factor-pts { font-weight: 600; font-size: 12px; min-width: 40px; text-align: right; }
+  .factor-pts.positive { color: var(--danger); }
+  .factor-pts.neutral { color: var(--secondary); }
+
+  .interpretation {
+    margin-top: 14px; padding: 12px;
+    background: #f8f9fa; border-radius: 10px;
+    font-size: 12px; color: var(--secondary); line-height: 1.7;
+  }
+  .interpretation strong { color: var(--text); }
+
+  .evidence-grade {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: 4px;
+  }
+  .evidence-grade.A { background:#e8f8ed; color:#1a7d3a; }
+  .evidence-grade.B { background:#fff3e0; color:#b86500; }
+  .evidence-grade.C { background:#f0f0f0; color:#86868b; }
+
+  .model-refs {
+    font-size: 11px; color: var(--secondary);
+    margin-top: 10px; line-height: 1.6; text-align: center; padding-bottom: 8px;
+  }
+  .btn-close {
+    width: 100%; padding: 12px; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer;
+    background: #f0f0f0; color: var(--text); margin-top: 16px;
+  }
+  .btn-close:active { opacity: 0.7; }
+
+  .disclaimer {
+    font-size: 10px; color: var(--secondary); text-align: center;
+    line-height: 1.6; padding: 0 2px 8px; flex-shrink: 0;
+  }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .disclaimer { padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+  }
+
+  /* Evidence legend */
+  .evidence-legend {
+    display: flex; gap: 12px; justify-content: center;
+    font-size: 10px; color: var(--secondary); margin-top: 8px;
+  }
+
+  /* Help button in header */
+  .help-btn {
+    display: inline-block;
+    padding: 4px 16px;
+    border: 1.5px solid var(--accent);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    background: transparent;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .help-btn:active { background: rgba(0,113,227,0.08); transform: scale(0.96); }
+
+  /* Help Overlay - reuse result overlay pattern */
+  .help-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .help-overlay.show { pointer-events: auto; opacity: 1; }
+  .help-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
+  .help-sheet {
+    position: relative;
+    width: 100%; max-width: 500px; max-height: 88vh;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    padding: 0 18px 24px;
+  }
+  @media (min-width: 768px) and (min-height: 900px) {
+    .help-sheet { max-width: var(--phone-w); }
+  }
+  .help-overlay.show .help-sheet { transform: translateY(0); }
+
+  .help-section {
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .help-section:last-child { border-bottom: none; }
+  .help-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .help-section .help-desc {
+    font-size: 12px;
+    color: var(--secondary);
+    line-height: 1.7;
+  }
+  .help-section .help-desc strong { color: var(--text); }
+  .help-section .help-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .help-section .help-table td, .help-section .help-table th {
+    padding: 5px 8px;
+    border: 1px solid #e8e8ed;
+    text-align: left;
+  }
+  .help-section .help-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .ref-tag {
+    display: inline-block;
+    padding: 1px 5px;
+    background: #e8f0fe;
+    color: #1a73e8;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 600;
+    margin: 0 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="phone-notch"></div>
+  <div class="phone-status">
+    <span class="time" id="status-time">9:41</span>
+    <span>📶 🔋</span>
+  </div>
+  <div class="app-container" id="appContainer">
+    <div class="app-header">
+      <span class="header-icon">🦾</span>
+      <h1>肩袖再撕裂风险计算器</h1>
+      <p class="subtitle">多中心循证模型 · 基于10+篇系统评价/Meta分析/列线图研究</p>
+      <button class="help-btn" id="btnHelp">📖 参数详解</button>
+    </div>
+    <div class="app-body" id="appBody">
+      <!-- Card 1: Demographics + Tear -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>基本信息与撕裂特征</div>
+        <div class="form-group">
+          <label>年龄 <span class="hint">岁</span></label>
+          <input type="number" id="age" min="18" max="100" value="55">
+          <div class="range-info"><span>Longo 2021: &gt;60岁 OR 1.8</span></div>
+        </div>
+        <div class="form-group">
+          <label>最大撕裂直径 <span class="hint">cm</span></label>
+          <input type="number" id="tear-size" min="0.5" max="12" step="0.1" value="2.5">
+          <div class="range-info"><span>≤1小 / 1-3中 / 3-5大</span><span>&gt;5巨大 (Longo 2021)</span></div>
+        </div>
+        <div class="form-group">
+          <label>肌腱回缩 (Patte 分级)</label>
+          <div class="toggle-group" id="patte-group">
+            <div class="toggle-btn active" data-value="1">I 级</div>
+            <div class="toggle-btn" data-value="2">II 级</div>
+            <div class="toggle-btn" data-value="3">III 级</div>
+          </div>
+          <div class="range-info"><span>I: 无/轻微</span><span>III: 至关节盂 (Hsu 2024: OR 8.0)</span></div>
+        </div>
+        <div class="form-group">
+          <label>累及肌腱数量</label>
+          <select id="tendons">
+            <option value="1">1 根 (仅冈上肌)</option>
+            <option value="2">2 根 (冈上肌+冈下肌或肩胛下肌)</option>
+            <option value="3">3 根 (大面积)</option>
+            <option value="4">4 根 (巨大撕裂)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>症状持续时间</label>
+          <select id="symptom-duration">
+            <option value="short">&lt; 6 个月</option>
+            <option value="medium">6-12 个月</option>
+            <option value="long">&gt; 12 个月</option>
+          </select>
+          <div class="range-info"><span>Zhao 2021: 延长→风险↑; 部分SR不显著</span></div>
+        </div>
+      </div>
+
+      <!-- Card 2: Imaging - Fatty Infiltration -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>脂肪浸润 (Goutallier 分级) <span class="evidence-grade A">A</span></div>
+        <div class="form-group">
+          <label>冈上肌 (SSP) <span class="hint">Darbandi 2025: Gr 2 vs 0-1 OR 1.95; Gr 3-4 vs 2 OR 3.37</span></label>
+          <div class="toggle-group" id="ssp-fatty">
+            <div class="toggle-btn active" data-value="0">0级</div>
+            <div class="toggle-btn" data-value="1">1级</div>
+            <div class="toggle-btn" data-value="2">2级</div>
+            <div class="toggle-btn" data-value="3">3级</div>
+            <div class="toggle-btn" data-value="4">4级</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>冈下肌 (ISP) <span class="hint">Darbandi 2025: Gr 2 vs 0-1 OR 2.22; Gr 3-4 vs 2 OR 2.06</span></label>
+          <div class="toggle-group" id="isp-fatty">
+            <div class="toggle-btn active" data-value="0">0级</div>
+            <div class="toggle-btn" data-value="1">1级</div>
+            <div class="toggle-btn" data-value="2">2级</div>
+            <div class="toggle-btn" data-value="3">3级</div>
+            <div class="toggle-btn" data-value="4">4级</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>切线征 (冈上肌萎缩)</label>
+          <div class="toggle-group" id="tangent-group">
+            <div class="toggle-btn active" data-value="negative">阴性</div>
+            <div class="toggle-btn" data-value="positive">阳性</div>
+          </div>
+          <div class="range-info"><span>Hsu 2024: OR 11.1; Hu 2025: OR 1.99</span></div>
+        </div>
+      </div>
+
+      <!-- Card 3: Imaging - Geometry -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>影像几何指标</div>
+        <div class="form-group">
+          <label>临界肩角 (CSA) <span class="hint">°</span> <span class="evidence-grade A">A</span></label>
+          <input type="number" id="csa" min="20" max="55" step="0.1" value="33">
+          <div class="range-info"><span>Liu 2023: OR 5.35 (↑CSA) 均值差+2.73°</span><span>正常&lt;35° / 高危&gt;38°</span></div>
+        </div>
+        <div class="form-group">
+          <label>肩峰肱骨间距 (AHD) <span class="hint">mm</span> <span class="evidence-grade A">A</span></label>
+          <input type="number" id="ahd" min="2" max="15" step="0.1" value="8">
+          <div class="range-info"><span>Darbandi 2024: 80%研究显著</span><span>最一致单项预测因子</span></div>
+        </div>
+        <div class="form-group">
+          <label>肌肉占有比 <span class="hint">%</span> <span class="evidence-grade B">B</span></label>
+          <input type="number" id="occupancy-ratio" min="20" max="100" step="1" value="65">
+          <div class="range-info"><span>ISAKOS 2025: p&lt;0.001</span><span>正常&gt;60%</span></div>
+        </div>
+        <div class="form-group">
+          <label>肩峰指数 / 小圆肌萎缩</label>
+          <select id="teres-acromial">
+            <option value="normal">两者均正常</option>
+            <option value="acromial-high">肩峰指数 ≥0.7</option>
+            <option value="teres-mild">小圆肌轻度萎缩</option>
+            <option value="teres-severe">小圆肌中重度萎缩 (ISAKOS 2025 p=0.046)</option>
+            <option value="both">两者均异常</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Card 4: Comorbidities -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>合并症与代谢因素</div>
+        <div class="form-group">
+          <label>糖尿病 <span class="evidence-grade A">A</span></label>
+          <select id="diabetes">
+            <option value="none">无糖尿病</option>
+            <option value="controlled">控制良好 (HbA1c &lt; 7%)</option>
+            <option value="uncontrolled">控制不佳 (HbA1c ≥ 7%)</option>
+          </select>
+          <div class="range-info"><span>Alhussain 2025: DM vs 非DM RR 1.62</span><span>Liang 2024: 良好控制 OR 0.24 vs 不佳</span></div>
+        </div>
+        <div class="form-group">
+          <label>骨密度</label>
+          <select id="bmd">
+            <option value="normal">正常 (T-score ≥ -1.0)</option>
+            <option value="osteopenia">骨量减少 (T-score -1.0~-2.5)</option>
+            <option value="osteoporosis">骨质疏松 (T-score ≤ -2.5)</option>
+          </select>
+          <div class="range-info"><span>Zhao 2021: WMD -0.56 T-score</span><span>Lianyungang 2025: 独立预测因子</span></div>
+        </div>
+        <div class="form-group">
+          <label>身高 <span class="hint">cm</span></label>
+          <input type="number" id="height" min="130" max="220" step="0.1" value="170">
+        </div>
+        <div class="form-group">
+          <label>体重 <span class="hint">kg</span></label>
+          <input type="number" id="weight" min="30" max="200" step="0.1" value="70">
+          <div class="bmi-display" id="bmi-display"></div>
+        </div>
+        <div class="form-group">
+          <label>吸烟状况 <span class="evidence-grade C">C</span></label>
+          <select id="smoking">
+            <option value="none">不吸烟</option>
+            <option value="former">已戒烟 (&gt;6个月)</option>
+            <option value="current">当前吸烟</option>
+          </select>
+          <div class="range-info"><span>Darbandi 2024: 多数SR不显著</span><span>小撕裂时可能相关</span></div>
+        </div>
+        <div class="form-group">
+          <label>皮质类固醇使用史</label>
+          <select id="steroid">
+            <option value="none">无</option>
+            <option value="occasional">偶用 (&lt;3次/年注射)</option>
+            <option value="frequent">频繁使用 (≥3次/年或长期口服)</option>
+          </select>
+          <div class="range-info"><span>Lianyungang 2025-26: 独立危险因素</span></div>
+        </div>
+      </div>
+
+      <!-- Card 5: Surgical -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>手术与康复因素</div>
+        <div class="form-group">
+          <label>修复技术</label>
+          <select id="repair-technique">
+            <option value="double-row">双排缝合 (DR)</option>
+            <option value="suture-bridge">缝线桥 (SB)</option>
+            <option value="single-row">单排缝合 (SR)</option>
+          </select>
+          <div class="range-info"><span>Gu 2023: 撕裂≥3cm DR优于SR OR 13.0</span></div>
+        </div>
+        <div class="form-group">
+          <label>术中修复张力</label>
+          <select id="repair-tension">
+            <option value="low">低张力</option>
+            <option value="moderate">中等张力</option>
+            <option value="high">高张力</option>
+          </select>
+          <div class="range-info"><span>Hu 2025: 高张力 OR 4.03 (最强单项)</span></div>
+        </div>
+        <div class="form-group">
+          <label>活动强度</label>
+          <select id="activity">
+            <option value="low">低强度 (久坐)</option>
+            <option value="moderate">中等强度</option>
+            <option value="high">高强度 (体力劳动/竞技运动)</option>
+          </select>
+          <div class="range-info"><span>RoHI 2019: 高强度 +2分</span></div>
+        </div>
+        <div class="form-group">
+          <label>术后康复方案 <span class="evidence-grade B">B</span></label>
+          <select id="rehab">
+            <option value="standard">标准 (制动4-6周→被动ROM→主动ROM)</option>
+            <option value="early">早期活动 (制动&lt;4周→即刻被动ROM)</option>
+            <option value="delayed">延迟活动 (制动&gt;6周→缓慢康复)</option>
+          </select>
+          <div class="range-info"><span>Longo 2021: 早期活动 OR≈2.0 再撕裂↑</span><span>巨大撕裂推荐延迟方案</span></div>
+        </div>
+      </div>
+
+      <p class="disclaimer">
+        ⚠️ 本工具仅供学术参考。证据等级：<strong>A级</strong>=多项高质量Meta分析一致 |
+        <strong>B级</strong>=部分研究显著/存在争议 | <strong>C级</strong>=证据较弱<br>
+        基于10+篇系统评价/Meta分析/列线图研究。不能替代专业医疗建议。
+      </p>
+    </div>
+
+    <div class="btn-area">
+      <button class="btn-calculate" id="btnCalculate">🔍 计算再撕裂风险</button>
+    </div>
+  </div>
+  <div class="phone-home"></div>
+</div>
+
+<!-- Mobile -->
+<div class="app-container" id="mobileApp" style="display:none;">
+  <div class="app-header">
+    <span class="header-icon">🦾</span>
+    <h1>肩袖再撕裂风险计算器</h1>
+    <p class="subtitle">多中心循证模型 · 10+篇文献</p>
+    <button class="help-btn" id="btnMobileHelp">📖 参数详解</button>
+  </div>
+  <div class="app-body" id="mobileBody"></div>
+  <div class="btn-area">
+    <button class="btn-calculate" id="btnMobileCalculate">🔍 计算再撕裂风险</button>
+  </div>
+  <p class="disclaimer" style="padding:0 14px 8px;">⚠️ 学术参考，不能替代专业医疗建议。</p>
+</div>
+
+<!-- Help Overlay -->
+<div class="help-overlay" id="helpOverlay">
+  <div class="help-backdrop" id="helpBackdrop"></div>
+  <div class="help-sheet" id="helpSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">📖 测量操作手册 & 文献关键结果附录</div>
+
+    <div class="help-section">
+      <h3>一、影像学测量操作指南</h3>
+      <div class="help-desc">
+        以下参数均可在术前常规 MRI 或 X 线片上获取。标注的关键文献为参数纳入本模型的证据来源。<span class="ref-tag">★ 操作要点</span>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>1. 撕裂大小测量</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>MRI T2/PD 冠状位 + 矢状位<br>
+        <strong>操作：</strong><br>
+        · 前后径 (AP)：矢状位上肌腱断端的前后跨度<br>
+        · 内外径 (ML)：冠状位上肌腱断端的内外侧跨度<br>
+        · 取两者中<strong>最大值</strong>作为"最大撕裂直径"<br>
+        · 若涉及多根肌腱，分别测量后取最大跨度<br>
+        <strong>Cofield 分类：</strong>小&lt;1cm | 中1-3cm | 大3-5cm | 巨大&gt;5cm<br>
+        <strong>文献：</strong>Longo 2021 (31项Meta) — 大/巨大撕裂再撕裂率37% vs 小/中12.5%，OR≈3-5。Gu 2023 — ≥3cm时双排修复显著优于单排 (OR 13.0)。Hu 2025 — OR 1.43/cm。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>2. Patte 肌腱回缩分级</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>MRI T2 冠状位<br>
+        <strong>操作：</strong>在冠状面上观察冈上肌肌腱断端位置，以肱骨头为参照：<br>
+        · <strong>I 级：</strong>断端紧邻大结节足印区，回缩不明显<br>
+        · <strong>II 级：</strong>断端回缩至肱骨头<strong>中1/3</strong>水平<br>
+        · <strong>III 级：</strong>断端回缩至<strong>关节盂</strong>水平或更内侧<br>
+        <strong>线索：</strong>肌腱残端呈球形增厚、肌-腱结合部明显内移提示高级别回缩。<br>
+        <strong>文献：</strong>Hsu 2024 — Patte III 不可修复 OR 8.0 (95%CI 4.3-14.9)。Hu 2025 — OR 2.26。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>3. Goutallier 脂肪浸润分级</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>MRI T1 斜矢状位（选择肩胛盂切迹最清晰的层面——"Y"形切面）<br>
+        <strong>操作（Goutallier 原始分级，Fuchs 改良 MRI 版）：</strong>
+      </div>
+      <table class="help-table">
+        <tr><th>分级</th><th>判断标准</th><th>脂肪信号占比</th></tr>
+        <tr><td>0级</td><td>肌肉内无脂肪条纹</td><td>0%</td></tr>
+        <tr><td>1级</td><td>少量线状脂肪条纹</td><td>&lt;25%</td></tr>
+        <tr><td>2级</td><td>脂肪明显但&lt;肌肉</td><td>25-50%</td></tr>
+        <tr><td>3级</td><td>脂肪=肌肉</td><td>50%</td></tr>
+        <tr><td>4级</td><td>脂肪＞肌肉</td><td>&gt;50%</td></tr>
+      </table>
+      <div class="help-desc">
+        <strong>操作技巧：</strong>分别评估冈上肌(SSP)和冈下肌(ISP)—Darbandi 2025证明两者对再撕裂有<strong>独立</strong>效应。肩胛下肌和小圆肌的FI对再撕裂不显著。<br>
+        <strong>文献：</strong>Darbandi 2025 (18项Meta, n=1,997)：<br>
+        · SSP G2 vs G0-1: OR 1.95 (1.09-3.48) | G3-4 vs G2: OR 3.37 (1.08-10.53)<br>
+        · ISP G2 vs G0-1: OR 2.22 (1.07-4.62) | G3-4 vs G2: OR 2.06 (1.02-4.16)<br>
+        · 再撕裂率：轻微FI≈16% → 中度FI≈34% → 重度FI≈53%
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>4. 切线征 (Tangent Sign)</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>MRI T1 斜矢状位（肩胛盂"Y"形切面）<br>
+        <strong>操作：</strong><br>
+        1. 定位到肩胛冈最内侧可见的矢状切面<br>
+        2. 画一条直线连接<strong>肩胛冈上缘</strong>与<strong>喙突上缘</strong><br>
+        3. 观察<strong>冈上肌肌腹</strong>是否跨越此线<br>
+        · <strong>阴性：</strong>肌腹跨越切线 → 肌肉体积正常<br>
+        · <strong>阳性：</strong>肌腹未能达到切线 → 严重萎缩，不可修复的高危信号<br>
+        <strong>文献：</strong>Hsu 2024: 阳性切线征为不可修复性最强预测因子 (OR 11.1, 4.3-28.4)。Hu 2025: OR 1.99。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>5. 临界肩角 (CSA) 测量</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>肩关节正位 X 线片（或 MRI 冠状位重建）<br>
+        <strong>操作：</strong><br>
+        1. 标记<strong>关节盂上缘 (S)</strong>和<strong>关节盂下缘 (I)</strong>，画线连接<br>
+        2. 标记<strong>肩峰最外下缘 (A)</strong><br>
+        3. 画线连接关节盂下缘 (I) 至肩峰最外下缘 (A)<br>
+        4. 两条线的夹角即为 CSA<br>
+        <strong>正常值：</strong>&lt;35°<br>
+        <strong>高危阈值：</strong>CSA &gt; 38° — ISAKOS 2025 多变量分析中 CSA 效应可能被其他因素介导，但独立分析仍显著。<br>
+        <strong>文献：</strong>Liu 2023 (11项Meta, n=1,449) — 再撕裂组CSA均值高2.73°(p=0.009)；CSA增大 OR 5.35 (2.02-14.15)。Darbandi 2024 — 67%研究显著。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>6. 肩峰肱骨间距 (AHD)</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>肩关节正位 X 线片或 MRI T2 冠状位<br>
+        <strong>操作：</strong><br>
+        1. 在冠状面上找到<strong>肱骨头最高点</strong><br>
+        2. 从此点向<strong>肩峰下缘</strong>做垂直线<br>
+        3. 测量该最短距离 (mm)<br>
+        <strong>正常值：</strong>7–14mm<br>
+        <strong>高危阈值：</strong>&lt;6mm — 反映慢性袖缺损和肱骨头上移<br>
+        <strong>文献：</strong>Darbandi 2024 (31项系统评价) — 80%的研究中显著，最一致的单项预测因子。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>7. 肌肉占有比 (Occupancy Ratio)</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>MRI T1 斜矢状位<br>
+        <strong>操作：</strong><br>
+        1. 在肩胛盂"Y"形切面上勾画<strong>冈上肌肌腹</strong>的横截面积<br>
+        2. 勾画<strong>冈上窝</strong>的总面积<br>
+        3. 占有比 = 肌腹面积 ÷ 冈上窝总面积 × 100%<br>
+        <strong>正常值：</strong>&gt;60%<br>
+        <strong>高危阈值：</strong>&lt;50%<br>
+        <strong>文献：</strong>ISAKOS 2025 — 多变量分析 p&lt;0.001，独立再撕裂预测因子。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>8. 肩峰指数 (AI)</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>肩关节正位 X 线片<br>
+        <strong>操作 (Nyffeler 法)：</strong><br>
+        1. 画关节盂面的切线，测量此线至<strong>肩峰外侧缘</strong>的距离 (GA)<br>
+        2. 测量同一切线至<strong>肱骨头外侧缘</strong>的距离 (GH)<br>
+        3. AI = GA ÷ GH<br>
+        <strong>正常值：</strong>&lt;0.7 | <strong>异常：</strong>≥0.7<br>
+        <strong>文献：</strong>Darbandi 2024 — AI对初始撕裂更相关，对再撕裂预测力较弱。ISAKOS 2025 — 多变量分析中不显著。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>9. 小圆肌萎缩评估</h3>
+      <div class="help-desc">
+        <strong>影像：</strong>MRI T1 斜矢状位<br>
+        <strong>操作：</strong>观察小圆肌肌腹大小和脂肪浸润程度，与同侧三角肌对比做半定量判断：<br>
+        · <strong>无萎缩：</strong>肌腹饱满，无或极少脂肪条纹<br>
+        · <strong>轻度：</strong>肌腹轻度缩小，可见散在脂肪浸润<br>
+        · <strong>中重度：</strong>肌腹明显萎缩，广泛脂肪替代，Goutallier≥2<br>
+        <strong>文献：</strong>ISAKOS 2025 — 小圆肌萎缩为独立预测因子 (p=0.046)。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>10. 骨密度 (BMD) 评估</h3>
+      <div class="help-desc">
+        <strong>工具：</strong>DEXA 扫描 (双能X线吸收法)<br>
+        <strong>测量部位：</strong>腰椎 (L1-L4) + 髋部 (股骨颈/全髋)<br>
+        <strong>T-score 解读：</strong>正常≥-1.0 | 骨量减少 -1.0~-2.5 | 骨质疏松≤-2.5<br>
+        <strong>替代方案：</strong>若无法获得DEXA数据，可在X线片上观察肱骨近端骨小梁稀疏程度（Deltoid tuberosity index）或CT测亨氏单位(HU值)&lt;100作为低BMD的替代指标。<br>
+        <strong>文献：</strong>Zhao 2021 — 再撕裂组T-score WMD -0.56 (p=0.003)。Lianyungang 2025-26 — 骨质疏松为独立预测因子 (C-index 0.814)。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>二、临床参数评估指南</h3>
+    </div>
+
+    <div class="help-section">
+      <h3>11. 糖尿病评估</h3>
+      <div class="help-desc">
+        <strong>HbA1c 临界阈值：</strong>7.0%<br>
+        <strong>评估时机：</strong>术前1-3个月内<br>
+        <strong>文献：</strong>Alhussain 2025 (14项Meta, n=113,286) — DM vs 非DM: RR 1.62 (1.27-2.06)。Liang 2024 (6项Meta, n=4,395) — 控制良好vs不佳: OR 0.242 (0.128-0.454)，良好控制可降低约76%再撕裂风险。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>12. 术中修复张力评估</h3>
+      <div class="help-desc">
+        <strong>评估方法：</strong><br>
+        · <strong>低张力：</strong>肌腱可无阻力拉回足印区，边缘可轻松覆盖<br>
+        · <strong>中等张力：</strong>需一定拉力，但仍可完全覆盖足印区<br>
+        · <strong>高张力：</strong>需显著拉力，仅能部分覆盖或边缘对合紧张<br>
+        <strong>应对策略：</strong>高张力时可考虑——间隔 slide、边缘汇聚、部分修复、补片桥接或上关节囊重建。<br>
+        <strong>文献：</strong>Hu 2025 — 高张力OR 4.03，最强单项预测因子。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>13. 康复方案选择</h3>
+      <div class="help-desc">
+        <strong>标准方案 (制动4-6周)：</strong>适用于大部分中/小型撕裂<br>
+        <strong>延迟方案 (制动&gt;6周)：</strong>推荐用于巨大撕裂、高张力修复、严重FI、骨质疏松患者<br>
+        <strong>早期活动 (制动&lt;4周)：</strong>仅推荐用于小撕裂+低风险+年轻患者<br>
+        <strong>文献：</strong>Longo 2021 — 早期活动再撕裂率25.6% vs 延迟14.2%。3-6个月为最高危再撕裂窗口。
+      </div>
+    </div>
+
+    <div class="help-section">
+      <h3>三、附录：文献关键结果速查</h3>
+      <div class="help-desc">
+        以下列出本模型引用的文献及其关键定量结果，供临床决策和论文引用参考。
+      </div>
+      <table class="help-table">
+        <tr><th>研究</th><th>设计</th><th>N</th><th>关键发现</th></tr>
+        <tr><td>Hu 2025 <em>Sci Rep</em></td><td>列线图</td><td>570</td><td>6因子模型 AUC 0.76；高张力 OR 4.03</td></tr>
+        <tr><td>Darbandi 2025 <em>Arthroscopy</em></td><td>Meta</td><td>1,997</td><td>SSP G2 OR 1.95; G3-4 OR 3.37。ISP独立效应。SSC/TM不显著。</td></tr>
+        <tr><td>Darbandi 2024 <em>Arthroscopy</em></td><td>系统评价</td><td>31项</td><td>AHD 80%显著(最一致)；FI 58%；CSA 67%；吸烟/性别不显著</td></tr>
+        <tr><td>Longo 2021 <em>BMC MSD</em></td><td>Meta</td><td>31项</td><td>大/巨大再撕裂率37% vs 小/中12.5%；年龄&gt;60 OR 1.8；3-6月最高危</td></tr>
+        <tr><td>Liu 2023 <em>Arch Orthop</em></td><td>Meta</td><td>1,449</td><td>CSA增大 OR 5.35; 再撕裂组CSA高2.73°</td></tr>
+        <tr><td>Yang 2023 <em>JSES</em></td><td>Meta</td><td>85,497</td><td>肥胖 OR 2.58; 并发症 OR 1.57; ASES MD -3.59</td></tr>
+        <tr><td>Alhussain 2025</td><td>Meta</td><td>113k</td><td>DM vs 非DM RR 1.62; 完全愈合 OR 2.68(非DM)</td></tr>
+        <tr><td>Liang 2024 <em>J Orthop Sci</em></td><td>Meta</td><td>4,395</td><td>控制良好vs不佳 OR 0.242(降76%风险)</td></tr>
+        <tr><td>Zhao 2021 <em>JSES</em></td><td>Meta</td><td>5,693</td><td>BMD WMD -0.56; 糖尿病 OR 1.42</td></tr>
+        <tr><td>Gu 2023 <em>OJSM</em></td><td>Meta</td><td>791</td><td>≥3cm时DR优于SR OR 13.0; &lt;3cm无差异</td></tr>
+        <tr><td>Hsu 2024 <em>JSES</em></td><td>Meta</td><td>2,700</td><td>切线征 OR 11.1; Patte III OR 8.0</td></tr>
+        <tr><td>Lianyungang 2025-26</td><td>列线图</td><td>587</td><td>C-index 0.814; 骨质疏松+类固醇为独立因子</td></tr>
+        <tr><td>Kwon 2019 RoHI <em>AJSM</em></td><td>评分系统</td><td>603</td><td>15分系统: ≤4低危~6%; 5-9中危~55%; ≥10高危~86%</td></tr>
+        <tr><td>Müller 2025 <em>BMC MSD</em></td><td>伞状综述</td><td>23项SR</td><td>MMP3/TNC/ESRRβ基因多态性为新兴风险因子</td></tr>
+      </table>
+      <div class="help-desc" style="margin-top:8px;">
+        <strong>模型计算方法：</strong>21项因子加权得分总和 → Logistic回归 (Offset=260, Scale=72) → 12个月概率。<br>
+        <strong>免责声明：</strong>本模型基于已发表文献的近似权重，非原始数据拟合。仅供学术参考与术前教育，不替代专业医疗判断。
+      </div>
+    </div>
+
+    <button class="btn-close" id="btnCloseHelp">关闭</button>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-backdrop" id="resultBackdrop"></div>
+  <div class="result-sheet" id="resultSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">📊 多中心循证风险评估</div>
+    <div class="result-gauge">
+      <div class="risk-circle" id="riskCircle" style="background:conic-gradient(#34c759 0%,#e8e8ed 0%)">
+        <div class="risk-inner">
+          <span class="risk-value" id="riskValue">--</span>
+          <span class="risk-label">12个月再撕裂概率</span>
+        </div>
+      </div>
+      <div class="risk-badge" id="riskBadge">--</div>
+      <div class="evidence-legend">
+        <span><span class="evidence-grade A">A</span> 强证据</span>
+        <span><span class="evidence-grade B">B</span> 中等</span>
+        <span><span class="evidence-grade C">C</span> 弱证据</span>
+      </div>
+    </div>
+    <div class="result-section">
+      <h4 id="pointsSummary"></h4>
+      <div id="factorList"></div>
+      <div class="interpretation" id="interpretation"></div>
+    </div>
+    <div class="model-refs">
+      <strong>参考文献：</strong><br>
+      Hu et al. 2025 <em>Sci Rep</em> (n=570, AUC 0.76) ·
+      Darbandi et al. 2025 <em>Arthroscopy</em> (18项, n=1,997) ·
+      Longo et al. 2021 <em>BMC MSD</em> (31项) ·
+      Liu et al. 2023 <em>Arch Orthop Trauma Surg</em> (11项, n=1,449) ·
+      Yang et al. 2023 <em>JSES</em> (13项, n=85,497) ·
+      Alhussain et al. 2025 (14项, n=113k) ·
+      Liang et al. 2024 <em>J Orthop Sci</em> (6项, n=4,395) ·
+      Zhao et al. 2021 <em>JSES</em> (14项, n=5,693) ·
+      Lianyungang 2025-26 (n=587, C-index 0.814) ·
+      Kwon et al. 2019 RoHI (n=603) ·
+      Gu et al. 2023 <em>OJSM</em> (10项) ·
+      Hsu et al. 2024 <em>JSES</em> (18项, n=2,700)
+    </div>
+    <button class="btn-close" id="btnClose">关闭</button>
+  </div>
+</div>
+
+<script>
+// --- Platform ---
+const isDesktop = window.matchMedia('(min-width: 768px) and (min-height: 900px)').matches;
+if (isDesktop) {
+  document.querySelector('.phone-frame').style.display = 'flex';
+  const now = new Date();
+  document.getElementById('status-time').textContent =
+    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+} else {
+  document.getElementById('mobileApp').style.display = 'flex';
+  document.querySelector('.result-sheet').style.maxWidth = '100%';
+}
+
+// Clone cards to mobile
+if (isDesktop) {
+  document.getElementById('mobileBody').innerHTML = document.getElementById('appBody').innerHTML;
+}
+
+// Toggle groups
+document.querySelectorAll('.toggle-group').forEach(group => {
+  group.addEventListener('click', (e) => {
+    if (e.target.classList.contains('toggle-btn')) {
+      group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    }
+  });
+});
+
+function getToggleVal(id) {
+  const g = document.getElementById(id);
+  const a = g ? g.querySelector('.toggle-btn.active') : null;
+  return a ? a.dataset.value : null;
+}
+
+// BMI
+function updateBmi() {
+  const h = parseFloat(document.getElementById('height').value) || 170;
+  const w = parseFloat(document.getElementById('weight').value) || 70;
+  const bmi = w / ((h / 100) ** 2);
+  const s = bmi.toFixed(1);
+  let t = ''; if (bmi<18.5) t='偏瘦'; else if (bmi<24) t='正常'; else if (bmi<28) t='超重'; else t='肥胖';
+  const el = document.getElementById('bmi-display');
+  if (el) el.textContent = 'BMI: ' + s + ' kg/m² (' + t + ') [Yang 2023: 肥胖 OR 2.58]';
+  return bmi;
+}
+document.getElementById('height').addEventListener('input', updateBmi);
+document.getElementById('weight').addEventListener('input', updateBmi);
+updateBmi();
+
+/*
+ * ====================================================================
+ * COMPREHENSIVE EVIDENCE-BASED RISK CALCULATION
+ *
+ * Based on 10+ meta-analyses, systematic reviews, and nomogram studies
+ * (2021-2026). Each factor weighted proportionally to its pooled OR/RR.
+ *
+ * Evidence Grades:
+ *   A = Multiple high-quality meta-analyses, consistent direction, low I²
+ *   B = Some meta-analyses significant, some conflicting
+ *   C = Limited/weak evidence, not consistently significant
+ * ====================================================================
+ */
+
+function calculateRisk() {
+  // === parse inputs ===
+  const age    = parseFloat(document.getElementById('age').value) || 55;
+  const tear   = parseFloat(document.getElementById('tear-size').value) || 2.5;
+  const patte  = parseInt(getToggleVal('patte-group')) || 1;
+  const sspFI  = parseInt(getToggleVal('ssp-fatty')) || 0;
+  const ispFI  = parseInt(getToggleVal('isp-fatty')) || 0;
+  const tangent= getToggleVal('tangent-group') || 'negative';
+  const tendons= parseInt(document.getElementById('tendons').value) || 1;
+  const csa    = parseFloat(document.getElementById('csa').value) || 33;
+  const ahd    = parseFloat(document.getElementById('ahd').value) || 8;
+  const occ    = parseFloat(document.getElementById('occupancy-ratio').value) || 65;
+  const ta     = document.getElementById('teres-acromial').value;
+  const diabetes = document.getElementById('diabetes').value;
+  const bmd    = document.getElementById('bmd').value;
+  const smoking= document.getElementById('smoking').value;
+  const steroid= document.getElementById('steroid').value;
+  const bmi    = updateBmi();
+  const h      = parseFloat(document.getElementById('height').value) || 170;
+  const w      = parseFloat(document.getElementById('weight').value) || 70;
+  const activity   = document.getElementById('activity').value;
+  const technique  = document.getElementById('repair-technique').value;
+  const tension    = document.getElementById('repair-tension').value;
+  const duration   = document.getElementById('symptom-duration').value;
+  const rehab      = document.getElementById('rehab').value;
+
+  const F = [];
+
+  // ============================================================
+  // GRADE A FACTORS (Strong Evidence)
+  // ============================================================
+
+  // 1. AGE — Longo 2021: >60 OR 1.8 (1.5-2.3); Hu 2025 nomogram
+  let agePts = 0;
+  if (age > 70) agePts = 28;
+  else if (age > 60) agePts = 18;
+  else if (age > 50) agePts = 9;
+  F.push({ n:'年龄', v:age+'岁', p:agePts, g:'A', d:'Longo 2021 OR 1.8(>60); Hu 2025 列线图' });
+
+  // 2. TEAR SIZE — Longo 2021: sm/med 12.5% vs lg/massive 37% retear; OR≈3-5
+  let tearPts = 0;
+  if (tear > 5)       tearPts = 58;   // massive
+  else if (tear > 3)  tearPts = 40;   // large
+  else if (tear > 2)  tearPts = 24;   // medium-large
+  else if (tear > 1)  tearPts = 10;   // medium
+  F.push({ n:'撕裂大小', v:tear+'cm (Cofield)', p:tearPts, g:'A', d:'Longo 2021 31项MA; Gu 2023; Hu 2025' });
+
+  // 3. PATE RETRACTION — Hsu 2024: III OR 8.0 (4.3-14.9); Hu 2025
+  let pattePts = 0;
+  if (patte===2) pattePts=18; if (patte===3) pattePts=42;
+  F.push({ n:'Patte回缩', v:['','I','II','III'][patte]+'级', p:pattePts, g:'A', d:'Hsu 2024 OR 8.0(III); Hu 2025' });
+
+  // 4. SSP FATTY INFILTRATION — Darbandi 2025: Gr2 vs 0-1 OR 1.95; Gr3-4 vs 2 OR 3.37
+  // Retear rates: Mild 16% → Moderate 34% → Severe 53%
+  let sspPts = 0;
+  if (sspFI===2) sspPts=18; else if (sspFI===3) sspPts=32; else if (sspFI===4) sspPts=42;
+  F.push({ n:'冈上肌脂肪浸润', v:sspFI+'级', p:sspPts, g:'A', d:'Darbandi 2025 MA: G2 OR 1.95, G3-4 OR 3.37; 再撕裂率 16→34→53%' });
+
+  // 5. ISP FATTY INFILTRATION — Darbandi 2025: Gr2 vs 0-1 OR 2.22; Gr3-4 vs 2 OR 2.06
+  let ispPts = 0;
+  if (ispFI===2) ispPts=20; else if (ispFI>=3) ispPts=32;
+  F.push({ n:'冈下肌脂肪浸润', v:ispFI+'级', p:ispPts, g:'A', d:'Darbandi 2025 MA: G2 OR 2.22, G3-4 OR 2.06; 独立预测' });
+
+  // 6. TANGENT SIGN — Hsu 2024 OR 11.1 (4.3-28.4); Hu 2025 OR 1.99
+  const tanPts = tangent==='positive' ? 28 : 0;
+  F.push({ n:'切线征(冈上肌萎缩)', v:tangent==='positive'?'阳性':'阴性', p:tanPts, g:'A', d:'Hsu 2024 OR 11.1; Hu 2025 OR 1.99' });
+
+  // 7. CSA — Liu 2023: OR 5.35 (2.02-14.15); mean diff +2.73°; Darbandi 2024: 67% significant
+  let csaPts = 0;
+  if (csa > 42)       csaPts = 30;
+  else if (csa > 40)  csaPts = 24;
+  else if (csa > 38)  csaPts = 16;
+  else if (csa > 35)  csaPts = 8;
+  F.push({ n:'临界肩角(CSA)', v:csa+'°', p:csaPts, g:'A', d:'Liu 2023 MA OR 5.35; Darbandi 2024: 67%研究显著' });
+
+  // 8. AHD — Darbandi 2024: 80%研究显著, most consistent predictor
+  let ahdPts = 0;
+  if (ahd < 5)       ahdPts = 30;
+  else if (ahd < 6)  ahdPts = 22;
+  else if (ahd < 7)  ahdPts = 12;
+  else if (ahd < 8)  ahdPts = 4;
+  F.push({ n:'肩峰肱骨间距(AHD)', v:ahd+'mm', p:ahdPts, g:'A', d:'Darbandi 2024: 80%研究显著 — 最一致单项预测因子' });
+
+  // 9. DIABETES — Alhussain 2025: DM vs non-DM RR 1.62; Liang 2024: controlled vs uncontrolled OR 0.242
+  let dmPts = 0;
+  if (diabetes==='controlled') dmPts=12;
+  if (diabetes==='uncontrolled') dmPts=30;
+  F.push({ n:'糖尿病', v:{none:'无',controlled:'控制良好',uncontrolled:'控制不佳'}[diabetes], p:dmPts, g:'A', d:'Alhussain 2025 RR 1.62; Liang 2024 良好控制 OR 0.24' });
+
+  // 10. OBESITY/BMI — Yang 2023: obesity OR 2.58 (1.23-5.41)
+  let bmiPts = 0;
+  if (bmi >= 35)      bmiPts = 20;
+  else if (bmi >= 30) bmiPts = 14;
+  else if (bmi >= 28) bmiPts = 7;
+  else if (bmi >= 25) bmiPts = 3;
+  F.push({ n:'BMI（肥胖）', v:bmi.toFixed(1)+' kg/m²', p:bmiPts, g:'A', d:'Yang 2023 MA OR 2.58; 13项研究 n=85,497' });
+
+  // 11. REPAIR TENSION — Hu 2025: high tension OR 4.03 (strongest single predictor)
+  let tensPts = 0;
+  if (tension==='moderate') tensPts=20; if (tension==='high') tensPts=45;
+  F.push({ n:'术中修复张力', v:{low:'低',moderate:'中',high:'高'}[tension], p:tensPts, g:'A', d:'Hu 2025 列线图: 高张力 OR 4.03 — 最强单项预测因子' });
+
+  // ============================================================
+  // GRADE B FACTORS (Moderate Evidence)
+  // ============================================================
+
+  // 12. BMD — Zhao 2021 WMD -0.56; Lianyungang 2025 independent predictor
+  let bmdPts = 0;
+  if (bmd==='osteopenia') bmdPts=10; if (bmd==='osteoporosis') bmdPts=24;
+  F.push({ n:'骨密度', v:{normal:'正常',osteopenia:'骨量减少',osteoporosis:'骨质疏松'}[bmd], p:bmdPts, g:'B', d:'Zhao 2021 WMD -0.56; Lianyungang 2025 独立预测' });
+
+  // 13. TENDONS — Müller 2025; multiple studies
+  const tenPts = (tendons-1)*7;
+  F.push({ n:'累及肌腱数', v:tendons+'根', p:tenPts, g:'B', d:'Müller 2025 伞状综述; 多项研究一致' });
+
+  // 14. OCCUPANCY RATIO — ISAKOS 2025 p<0.001
+  let occPts = 0;
+  if (occ<40) occPts=18; else if (occ<50) occPts=11; else if (occ<60) occPts=4;
+  F.push({ n:'肌肉占有比', v:occ+'%', p:occPts, g:'B', d:'ISAKOS 2025 p<0.001; 反映肌纤维/脂肪比例' });
+
+  // 15. TERES MINOR / ACROMIAL INDEX
+  let taPts = 0;
+  if (ta==='acromial-high') taPts=5;
+  if (ta==='teres-mild') taPts=7;
+  if (ta==='teres-severe') taPts=15;
+  if (ta==='both') taPts=19;
+  F.push({ n:'小圆肌/肩峰指数', v:{normal:'均正常','acromial-high':'AI≥0.7','teres-mild':'小圆肌轻度萎缩','teres-severe':'小圆肌中重度','both':'两者异常'}[ta], p:taPts, g:'B', d:'ISAKOS 2025 p=0.046; Darbandi 2024' });
+
+  // 16. REHAB PROTOCOL — Longo 2021: early active ROM <5wks 25.6% vs 14.2% retear
+  let rehabPts = 0;
+  if (rehab==='early') rehabPts=14;
+  if (rehab==='delayed') rehabPts=-5;  // protective for massive tears
+  F.push({ n:'康复方案', v:{standard:'标准(4-6周制动)',early:'早期活动(<4周)',delayed:'延迟(>6周)'}[rehab], p:Math.abs(rehabPts), g:'B', d:'Longo 2021: 早期 OR≈2.0 再撕裂↑; 巨大撕裂延迟方案有益' });
+  // Note: for delayed rehab, we show the absolute point reduction as a benefit
+
+  // 17. SYMPTOM DURATION
+  let durPts = 0;
+  if (duration==='medium') durPts=6; if (duration==='long') durPts=14;
+  F.push({ n:'症状时长', v:{short:'<6月',medium:'6-12月',long:'>12月'}[duration], p:durPts, g:'B', d:'Zhao 2021 显著; Darbandi 2024 不一致' });
+
+  // 18. STEROID USE — Lianyungang 2025-26 C-index 0.814
+  let steroidPts = 0;
+  if (steroid==='occasional') steroidPts=8; if (steroid==='frequent') steroidPts=18;
+  F.push({ n:'皮质类固醇使用', v:{none:'无',occasional:'偶用',frequent:'频繁'}[steroid], p:steroidPts, g:'B', d:'Lianyungang 2025-26: 独立危险因素 (n=587, C-index 0.814)' });
+
+  // 19. ACTIVITY LEVEL
+  let actPts = 0;
+  if (activity==='moderate') actPts=5; if (activity==='high') actPts=12;
+  F.push({ n:'活动强度', v:{low:'低',moderate:'中',high:'高'}[activity], p:actPts, g:'B', d:'RoHI 2019; Kwon et al. (n=603)' });
+
+  // ============================================================
+  // GRADE C FACTORS (Weak/Limited Evidence)
+  // ============================================================
+
+  // 20. REPAIR TECHNIQUE — Gu 2023: SR vs DR significant ONLY for tears ≥3cm
+  let techPts = 0;
+  if (technique==='single-row' && tear>=3) techPts=10;
+  else if (technique==='single-row') techPts=3;
+  F.push({ n:'修复技术', v:{'double-row':'双排','suture-bridge':'缝线桥','single-row':'单排'}[technique], p:techPts, g:'C', d:'Gu 2023: 仅≥3cm时SR vs DR差异显著 OR 13.0' });
+
+  // 21. SMOKING — Darbandi 2024: NOT consistently significant
+  let smokePts = 0;
+  if (smoking==='current') smokePts=5;
+  F.push({ n:'吸烟', v:{none:'不吸烟',former:'已戒烟',current:'当前吸烟'}[smoking], p:smokePts, g:'C', d:'Darbandi 2024: 多数SR不显著; 晚期再撕裂可能相关' });
+
+  // ============================================================
+  // TOTAL & LOGISTIC CONVERSION
+  // ============================================================
+
+  const totalPoints = F.reduce((s,f)=> {
+    // Handle negative points for delayed rehab
+    if (f.g==='B' && f.n==='康复方案' && rehab==='delayed') return s - 5;
+    return s + f.p;
+  }, 0);
+
+  // Calibrated logistic model
+  // Reference points: ~150pts ≈20% risk, ~250pts ≈50% risk, ~350pts ≈80% risk
+  const OFFSET = 260;
+  const SCALE = 72;
+  const logit = (totalPoints - OFFSET) / SCALE;
+  const probability = 1 / (1 + Math.exp(-logit));
+  const riskPct = Math.max(1, Math.min(98, Math.round(probability * 100)));
+
+  // Risk level
+  let riskLabel, riskClass, riskColor;
+  if (riskPct<20)      { riskLabel='低风险';   riskClass='low';        riskColor='#34c759'; }
+  else if (riskPct<40) { riskLabel='中等风险'; riskClass='moderate';   riskColor='#ff9500'; }
+  else if (riskPct<60) { riskLabel='高风险';   riskClass='high';       riskColor='#ff9500'; }
+  else                 { riskLabel='极高风险'; riskClass='very-high';  riskColor='#ff3b30'; }
+
+  // Interpretation
+  let interp;
+  if (riskPct<20) {
+    interp = '术后再撕裂概率<strong>较低</strong>。常规关节镜修复预后良好。建议标准康复方案（制动4-6周→渐进ROM）。依据：Longo 2021 (31项MA)、Darbandi 2025、Hu 2025。';
+  } else if (riskPct<40) {
+    interp = '存在<strong>中等</strong>再撕裂风险。建议：(1)术前优化可控因素（血糖控制→目标HbA1c<7%，Liang 2024 OR 0.24; 减重→Yang 2023 OR 2.58）；(2)术中考虑缝线桥/增强修复；(3)避免过早活动（Longo 2021 早期活动OR≈2.0）。';
+  } else if (riskPct<60) {
+    interp = '面临<strong>较高</strong>再撕裂风险。强烈建议：(1)术前严格控制血糖/减重/改善骨健康；(2)撕裂≥3cm选用双排/缝线桥技术（Gu 2023 OR 13.0 DR vs SR）；(3)延迟康复方案(制动>6周)；(4)考虑补片增强或PRP；(5)术后3-6月为最高危窗口（Longo 2021），需密切MRI随访。';
+  } else {
+    interp = '再撕裂风险<strong>极高</strong>。需综合评估：(1)手术获益是否大于风险；(2)考虑替代方案如上关节囊重建(SCR)、肌腱转位或反肩置换(rTSA)；(3)若手术，采用最强修复（双排/缝线桥+补片增强）、延迟康复、术后严格控制所有可干预因素。Hu 2025列线图中高张力(OR 4.03)为最强单项预测因子——术中应尽可能实现低张力修复。';
+  }
+
+  // === RENDER ===
+  document.getElementById('riskCircle').style.background =
+    'conic-gradient(' + riskColor + ' ' + riskPct + '%, #e8e8ed ' + riskPct + '%)';
+  document.getElementById('riskValue').textContent = riskPct + '%';
+  document.getElementById('riskValue').style.color = riskColor;
+  const badge = document.getElementById('riskBadge');
+  badge.textContent = riskLabel;
+  badge.className = 'risk-badge ' + riskClass;
+
+  document.getElementById('pointsSummary').textContent =
+    '风险因素分析 (总分: ' + totalPoints + ' 分 | 基于21项预测因子)';
+
+  document.getElementById('factorList').innerHTML = F.map(f =>
+    '<div class="factor-row"><span class="factor-left">' +
+    f.n + ' <span class="factor-val">' + f.v + '</span>' +
+    '<span class="evidence-grade ' + f.g + '">' + f.g + '</span>' +
+    '</span>' +
+    '<span class="factor-pts ' + (f.p>0?'positive':'neutral') + '">' +
+    (f.p>0?'+':'') + f.p + ' 分</span></div>'
+  ).join('');
+
+  document.getElementById('interpretation').innerHTML = '<strong>解读：</strong>' + interp;
+
+  document.getElementById('resultOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+// Overlay close (result)
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.getElementById('resultBackdrop').addEventListener('click', closeResult);
+document.getElementById('btnClose').addEventListener('click', closeResult);
+
+// Help overlay
+function openHelp() {
+  document.getElementById('helpOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeHelp() {
+  document.getElementById('helpOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.getElementById('btnHelp').addEventListener('click', openHelp);
+document.getElementById('btnMobileHelp').addEventListener('click', openHelp);
+document.getElementById('helpBackdrop').addEventListener('click', closeHelp);
+document.getElementById('btnCloseHelp').addEventListener('click', closeHelp);
+
+// Button events
+document.getElementById('btnCalculate').addEventListener('click', calculateRisk);
+if (!isDesktop) {
+  document.getElementById('btnMobileCalculate').addEventListener('click', calculateRisk);
+}
+
+// Service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>

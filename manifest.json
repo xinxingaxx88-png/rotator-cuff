@@ -1,0 +1,14 @@
+{
+  "name": "肩袖再撕裂风险计算器",
+  "short_name": "肩袖风险计算",
+  "description": "基于临床研究数据，输入患者指标推算肩袖修复术后再撕裂风险",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#f5f5f7",
+  "background_color": "#f5f5f7",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

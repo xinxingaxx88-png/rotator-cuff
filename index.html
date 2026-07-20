@@ -1009,9 +1009,9 @@ if (isDesktop) {
   document.getElementById('status-time').textContent =
     String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
 } else {
-  document.querySelector('.phone-frame').remove();
+  var pf=document.querySelector('.phone-frame');if(pf)pf.remove();
   document.getElementById('mobileApp').style.display = 'flex';
-  document.querySelector('.result-sheet').style.maxWidth = '100%';
+  var rs=document.querySelector('.result-sheet');if(rs)rs.style.maxWidth = '100%';
 }
 
 // Toggle groups

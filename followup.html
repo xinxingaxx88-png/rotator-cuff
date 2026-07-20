@@ -6,58 +6,75 @@
 <title>肩袖术后随访系统</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;background:#f0f2f5;color:#1a1a2e}
-.app{max-width:650px;margin:0 auto;padding:10px}
-.hdr{background:linear-gradient(135deg,#1a5276,#2c3e50);color:#fff;padding:12px 16px;border-radius:12px;margin-bottom:10px}
-.hdr h1{font-size:17px}
-.srch{width:100%;padding:8px 12px;border:none;border-radius:8px;font-size:13px;margin-top:6px;outline:none;background:rgba(255,255,255,.15);color:#fff}
-.srch::placeholder{color:rgba(255,255,255,.5)}
-.pcard{background:#fff;border-radius:10px;padding:10px 14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.pcard .pid{font-size:10px;color:#888}
-.pcard .pname{font-size:15px;font-weight:600}
-.pcard .pdetail{font-size:10px;color:#1a73e8}
-.pcard .pmeta{font-size:10px;color:#666}
-.tags{font-size:9px;margin:3px 0}.tags span{display:inline-block;padding:2px 6px;border-radius:4px;margin:1px}.tags .t1{background:#e8f0fe;color:#1a73e8}.tags .t2{background:#fff3e0;color:#e67e22}
-.bar{display:flex;gap:6px;margin:6px 0}
-.bar .btn{font-size:10px;padding:5px 10px;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-family:inherit}
-.btn1{background:#e8f0fe;color:#1a73e8}.btn2{background:#fff3e0;color:#e67e22}
-.dots{display:flex;gap:3px}
-.dot{flex:1;padding:5px 2px;border-radius:5px;text-align:center;font-size:10px;font-weight:600;cursor:pointer;border:2px solid #ddd;background:#fafafa;min-width:35px}
-.dot.done{background:#0d8a3e;border-color:#0d8a3e;color:#fff}
-.sort-bar{display:flex;gap:4px;margin-bottom:8px;align-items:center;flex-wrap:wrap}
-.sort-btn{padding:3px 10px;border-radius:12px;font-size:10px;cursor:pointer;border:1.5px solid #ddd;background:#fafafa}
-.sort-btn.on{border-color:#1a73e8;background:#e8f0fe;color:#1a73e8;font-weight:600}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;background:#eef1f5;color:#2c3e50;line-height:1.4}
+.app{max-width:680px;margin:0 auto;padding:12px}
+.hdr{background:linear-gradient(135deg,#1e3a5f,#2c5282);color:#fff;padding:16px 20px;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 12px rgba(30,58,95,.2)}
+.hdr h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+.hdr .st{font-size:11px;opacity:.8;margin-top:4px}
+.srch{width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,.3);border-radius:10px;font-size:14px;margin-top:8px;outline:none;background:rgba(255,255,255,.18);color:#fff;transition:all .2s}
+.srch:focus{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.5)}
+.srch::placeholder{color:rgba(255,255,255,.6)}
+.pcard{background:#fff;padding:12px 16px;margin-bottom:8px;border:1px solid #e2e6ea;border-radius:8px;border-left:3px solid #2c5282;width:100%;transition:border-color .15s}
+.pcard:hover{border-left-color:#4299e1}
+.pcard .pid{font-size:10px;color:#94a3b8;letter-spacing:.3px}
+.pcard .pname{font-size:15px;font-weight:600;color:#1a202c;margin:2px 0}
+.pcard .pdetail{font-size:10px;color:#4299e1;margin:1px 0}
+.pcard .pmeta{font-size:10px;color:#718096;font-weight:500}
+.tags{font-size:9px;margin:4px 0}.tags span{display:inline-block;padding:2px 7px;border-radius:3px;margin:1px;font-weight:500}.tags .t1{background:#ebf4ff;color:#2b6cb0}.tags .t2{background:#fffaf0;color:#c05621}
+.bar{display:flex;gap:8px;margin:8px 0}
+.bar .btn{font-size:10px;padding:6px 12px;border:none;border-radius:5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .12s}
+.bar .btn:hover{transform:translateY(-1px)}
+.btn1{background:#ebf4ff;color:#2b6cb0}.btn2{background:#fffaf0;color:#c05621}
+.dots{display:flex;gap:5px;justify-content:flex-start}
+.dot{width:48px;padding:6px 3px;border-radius:6px;text-align:center;font-size:10px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;background:#f7fafc;transition:all .12s;color:#718096}
+.dot:hover{border-color:#4299e1;background:#ebf4ff}
+.dot.done{background:#38a169;border-color:#38a169;color:#fff;box-shadow:0 1px 3px rgba(56,161,105,.3)}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tab{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#718096;transition:all .12s}.tab:hover{border-color:#4299e1;color:#4299e1}.tab.on{background:#2c5282;color:#fff;border-color:#2c5282}
+.sort-bar{display:flex;gap:5px;margin-bottom:10px;align-items:center;flex-wrap:wrap}
+.sort-btn{padding:4px 12px;border-radius:14px;font-size:10px;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#718096;transition:all .12s}.sort-btn:hover{border-color:#4299e1}.sort-btn.on{background:#2c5282;color:#fff;border-color:#2c5282;font-weight:600}
 .modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center}
 .modal.on{display:flex}
-.mback{position:absolute;inset:0;background:rgba(0,0,0,.4)}
-.msheet{position:relative;width:100%;max-width:650px;max-height:92vh;background:#fff;border-radius:20px 20px 0 0;overflow-y:auto;padding:0 14px 20px}
-.msheet .handle{width:36px;height:4px;background:#d1d1d6;border-radius:2px;margin:10px auto}
-.fhdr{padding:10px 0;border-bottom:1px solid #eee;margin-bottom:6px;position:sticky;top:0;background:#fff;z-index:5}
-.fhdr .fn{font-size:17px;font-weight:700}.fhdr .fm{font-size:10px;color:#666}
-.sec{margin:10px 0}.sec .st{font-size:12px;font-weight:700;color:#2c3e50;border-bottom:2px solid #2c3e50;padding-bottom:2px;margin-bottom:6px}
-.row{display:flex;align-items:center;gap:6px;padding:3px 0;flex-wrap:wrap}
-.row .lbl{font-size:11px;font-weight:500;min-width:65px}
-.row select,.row input{padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:11px;font-family:inherit;outline:none;background:#fff}
+.mback{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.msheet{position:relative;width:100%;max-width:680px;max-height:92vh;background:#fff;border-radius:20px 20px 0 0;overflow-y:auto;padding:0 16px 24px;box-shadow:0 -4px 20px rgba(0,0,0,.1)}
+.msheet .handle{width:40px;height:4px;background:#cbd5e0;border-radius:2px;margin:12px auto}
+.fhdr{padding:12px 0;border-bottom:1px solid #edf2f7;margin-bottom:8px;position:sticky;top:0;background:#fff;z-index:5}
+.fhdr .fn{font-size:17px;font-weight:700;color:#1a202c}.fhdr .fm{font-size:10px;color:#a0aec0;margin-top:2px}
+.sec{margin:12px 0}.sec .st{font-size:13px;font-weight:700;color:#2c5282;border-bottom:2px solid #e2e8f0;padding-bottom:3px;margin-bottom:8px}
+.row{display:flex;align-items:center;gap:8px;padding:4px 0;flex-wrap:wrap}
+.row .lbl{font-size:11px;font-weight:600;min-width:68px;color:#4a5568}
+.row select,.row input{padding:6px 10px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:11px;font-family:inherit;outline:none;background:#fff;transition:border-color .15s}
+.row select:focus,.row input:focus{border-color:#4299e1}
 .row select{min-width:80px}.row input[type=number]{width:65px}
-.cg{display:flex;gap:3px;flex-wrap:wrap}
-.c{cursor:pointer;padding:5px 10px;border:1.5px solid #ddd;border-radius:14px;font-size:11px;background:#fafafa}
-.c.on{border-color:#1a73e8;background:#e8f0fe;color:#1a73e8;font-weight:600}
-.pbtn{width:100%;padding:10px;background:#1a73e8;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;font-family:inherit}
-.sbtn{width:100%;padding:8px;background:#f0f0f0;color:#1a1a2e;border:none;border-radius:8px;font-size:13px;cursor:pointer;margin-top:4px;font-family:inherit}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:8px 20px;border-radius:16px;font-size:13px;z-index:200;opacity:0;pointer-events:none}
+.cg{display:flex;gap:4px;flex-wrap:wrap}
+.c{cursor:pointer;padding:6px 11px;border:1.5px solid #e2e8f0;border-radius:16px;font-size:11px;background:#f7fafc;color:#4a5568;transition:all .1s}
+.c:hover{border-color:#4299e1}.c.on{background:#2c5282;color:#fff;border-color:#2c5282;font-weight:600}
+.pbtn{width:100%;padding:12px;background:#2c5282;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;font-family:inherit;transition:background .15s}
+.pbtn:hover{background:#1e3a5f}
+.sbtn{width:100%;padding:9px;background:#edf2f7;color:#4a5568;border:none;border-radius:8px;font-size:13px;cursor:pointer;margin-top:5px;font-family:inherit;transition:background .15s}
+.sbtn:hover{background:#e2e8f0}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2d3748;color:#fff;padding:10px 24px;border-radius:20px;font-size:13px;z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .toast.on{opacity:1}
+.today-btn{font-size:10px;padding:4px 10px;border:1.5px solid #4299e1;color:#4299e1;border-radius:8px;cursor:pointer;background:#fff;margin-left:6px;white-space:nowrap;transition:all .12s}.today-btn:hover{background:#ebf4ff}
+.info-btn{display:inline-flex;width:17px;height:17px;align-items:center;justify-content:center;background:#4299e1;color:#fff;border-radius:50%;font-size:10px;cursor:pointer;font-weight:700;flex-shrink:0;margin-left:4px;transition:transform .12s}.info-btn:hover{transform:scale(1.15)}
+.info-popup{display:none;background:#f0f5ff;border:1px solid #bee3f8;border-radius:8px;padding:8px 10px;margin:4px 0;font-size:9px;line-height:1.6;color:#2d3748}.info-popup.on{display:block}
+table.dt{width:100%;border-collapse:collapse;font-size:10px;margin:6px 0;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}table.dt th{background:#2c5282;color:#fff;padding:7px 10px;text-align:left;font-size:11px;font-weight:600}table.dt td{padding:6px 10px;border-bottom:1px solid #edf2f7}table.dt tr:nth-child(even){background:#f7fafc}
+.help{font-size:9px;color:#718096;background:#fffbeb;padding:5px 10px;border-radius:6px;margin-bottom:6px;line-height:1.5;border-left:3px solid #ecc94b}.help.warn{background:#fff5f5;border-left-color:#fc8181}
+.grade{display:inline-flex;gap:3px;margin-top:2px}.grade span{padding:2px 6px;border-radius:3px;font-size:9px;font-weight:600}
+.ge{background:#c6f6d5;color:#22543d}.gg{background:#bee3f8;color:#2a4365}.gf{background:#feebc8;color:#7c2d12}.gp{background:#fed7d7;color:#742a2a}
 </style>
 </head>
 <body>
 <div id="app" class="app">
-  <div class="hdr"><h1>🦾 肩袖术后随访系统</h1><div style="font-size:11px;opacity:.85;margin-top:2px"><span id="tc">0</span>例</div></div>
+  <div class="hdr"><h1>🦾 肩袖术后随访系统</h1><div style="font-size:11px;opacity:.85;margin-top:2px"><span id="tc">0</span>例</div><button class="today-btn" onclick="showAddPatient()" style="margin-top:6px;font-size:11px;padding:6px 14px;border:1px solid rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.15)">➕ 添加患者</button></div>
   <input class="srch" id="search" placeholder="🔍 搜索姓名/住院号..." oninput="R()">
+  <div class="tabs"><span class="tab on" id="tabList" onclick="ST('list')">📋 患者列表</span><span class="tab" id="tabDash" onclick="ST('dash')">📊 统筹表</span></div>
   <div class="sort-bar">
     <span style="font-size:10px;color:#999">排序:</span>
     <span class="sort-btn on" id="sb_date" onclick="S('date')">手术日期</span>
     <span class="sort-btn" id="sb_age" onclick="S('age')">年龄</span>
     <select id="ftp" onchange="T(this.value)" style="padding:3px 8px;border:1.5px solid #ddd;border-radius:12px;font-size:10px;background:#fafafa;font-family:inherit"><option value="">📅 全部</option><option value="m1">≤1月</option><option value="m3">1-3月</option><option value="m6">3-6月</option><option value="y1">6-12月</option><option value="y5">1-5年</option><option value="y10">5-10年+</option></select>
   </div>
+  <div class="dash" id="dashPanel" style="display:none"></div>
   <div id="pl"></div>
   <div style="margin-top:8px"><button class="sbtn" onclick="E()" style="width:auto;display:inline-block;padding:6px 16px;font-size:11px">📥 导出CSV</button></div>
 </div>
@@ -70,25 +87,26 @@ var TP=[{k:"m1",l:"1月"},{k:"m3",l:"3月"},{k:"m6",l:"6月"},{k:"y1",l:"1年"},
 var D=JSON.parse(localStorage.getItem("rc_fu_v7")||"{}");
 var BL=JSON.parse(localStorage.getItem("rc_baseline")||"{}");
 var EX=JSON.parse(localStorage.getItem("rc_excluded")||"[]");
-var sb="date",sd=1,ftp="",cp=null,ct=null;
+var sb="date",sd=1,ftp="",cp=null,ct=null,cur="list";
 
 function cd(d){return TP.filter(function(t){return d&&d[t.k]&&d[t.k]._done}).length}
 function ex(id){return EX.indexOf(id)>=0}
+function EX2(id){var idx=EX.indexOf(id);if(idx>=0){EX.splice(idx,1);MT("已恢复显示")}else{EX.push(id);MT("已隐藏")}localStorage.setItem("rc_excluded",JSON.stringify(EX));R()}
 function G(){
   var q=(document.getElementById("search").value||"").toLowerCase();
-  var fl=P.filter(function(p){return(p.n+String(p.c)+p.s+p.o).toLowerCase().indexOf(q)>=0&&!ex(p.i)});
+  var allPts=getAllPatients();var fl=allPts.filter(function(p){return(p.n+String(p.c)+p.s+p.o).toLowerCase().indexOf(q)>=0&&!ex(p.i)});
   if(ftp){var now=new Date();var W={m1:[0,1],m3:[1,3],m6:[3,6],y1:[6,12],y5:[12,60],y10:[60,1200]};var w=W[ftp];
     if(w){fl=fl.filter(function(p){if(!p.s)return false;var ps=p.s.split("-");var sd=new Date(parseInt(ps[0]),parseInt(ps[1])-1,parseInt(ps[2]));var m=(now.getFullYear()-sd.getFullYear())*12+(now.getMonth()-sd.getMonth());return m>=w[0]&&m<=w[1]})}}
   return fl;
 }
-function R(){
-  var fl=G();document.getElementById("tc").textContent=P.length;
+function R(){if(cur==="dash"){RD();return}document.getElementById("dashPanel").style.display="none";document.getElementById("pl").style.display="";
+  var fl=G();document.getElementById("tc").textContent=getAllPatients().length;
   fl.sort(function(a,b){var va=V(a),vb=V(b);if(va<vb)return -sd;if(va>vb)return sd;return 0});
-  if(fl.length===0){document.getElementById("pl").innerHTML='<div style="text-align:center;padding:40px;color:#999">\u{1F4ED} 暂无患者</div>';return}
+  if(fl.length===0){document.getElementById("pl").innerHTML='<div style="text-align:center;padding:40px;color:#999">暂无患者</div>';return}
   document.getElementById("pl").innerHTML=fl.map(function(p){
     var pd=D[p.i]||{},dc=cd(pd),bl=BL[p.i]||{};
-    var tg='';if(bl.tear_size)tg+='<span class="t1">撕裂:'+bl.tear_size+'cm</span>';if(bl.patte)tg+='<span class="t1">Patte:'+bl.patte+'</span>';if(bl.gout_ssp)tg+='<span class="t1">Gout:'+bl.gout_ssp+'</span>';if(bl.technique)tg+='<span class="t2">'+bl.technique+'</span>';if(!tg)tg='<span style="font-size:9px;color:#999">\u{1F4CB}术前未填 | \u{1F527}术中未填</span>';
-    return '<div class="pcard"><div class="pid">#'+p.i+' \u00b7 '+p.s+' \u00b7 '+p.o+'</div><div class="tags">'+tg+'</div><div class="pname">'+p.n+' <span style="font-size:11px;color:#666;font-weight:400">'+p.g+' '+p.a+'岁</span></div><div class="pdetail">\u{1F4CB} '+p.c+' | \u{1F4DE} '+(p.h||"无")+'</div><div class="pmeta">'+(dc>0?'已完成 '+dc+'/6 时间点':'未开始随访')+'</div><div class="bar"><span class="btn btn1" onclick="event.stopPropagation();F('+p.i+',\'preop\')">\u{1F4CB} 术前评估</span><span class="btn btn2" onclick="event.stopPropagation();F('+p.i+',\'intraop\')">\u{1F527} 术中情况</span></div><div class="dots">'+TP.map(function(t){var td=pd[t.k]||{},d=td._done;return '<div class="dot'+(d?' done':'')+'" onclick="event.stopPropagation();F('+p.i+',\''+t.k+'\')" title="'+t.l+'">'+(d?'\u2713':t.l)+'</div>'}).join("")+'</div></div>';
+    var tg='';if(bl.tear_size)tg+='<span class="t1">撕裂:'+bl.tear_size+'cm</span>';if(bl.patte)tg+='<span class="t1">Patte:'+bl.patte+'</span>';if(bl.gout_ssp)tg+='<span class="t1">Gout:'+bl.gout_ssp+'</span>';if(bl.technique)tg+='<span class="t2">'+bl.technique+'</span>';if(!tg)tg='<span style="font-size:9px;color:#999">📋术前未填 | 🔧术中未填</span>';
+    return '<div class="pcard"><div class="pid">#'+p.i+' \u00b7 '+p.s+' \u00b7 '+p.o+'</div><div class="tags">'+tg+'</div><div class="pname">'+p.n+' <span style="font-size:11px;color:#666;font-weight:400">'+p.g+' '+p.a+'岁</span></div><div class="pdetail">📋 '+p.c+' | 📞 '+(p.h||"无")+'</div><div class="pmeta">'+(dc>0?'已完成 '+dc+'/6 时间点':'未开始随访')+'</div><div class="bar"><span class="btn btn1" onclick="event.stopPropagation();F('+p.i+',\'preop\')">📋 术前评估</span><span class="btn btn2" onclick="event.stopPropagation();F('+p.i+',\'intraop\')">🔧 术中情况</span></div><div class="dots">'+TP.map(function(t){var td=pd[t.k]||{},d=td._done;return '<div class="dot'+(d?' done':'')+'" onclick="event.stopPropagation();F('+p.i+',\''+t.k+'\')" title="'+t.l+'">'+(d?'\u2713':t.l)+'</div>'}).join("")+''+(!P.find(function(x){return x.i===p.i})?'<div style="display:flex;justify-content:flex-end;margin-top:4px"><span style="font-size:9px;color:#c0392b;cursor:pointer" onclick="event.stopPropagation();deletePatient('+p.i+')">🗑️删除</span></div>':'')+'</div></div>';
   }).join("");
 }
 
@@ -96,33 +114,142 @@ function F(id,tk){
   var pt=P.find(function(p){return p.i===id});if(!pt)return;cp=pt;
   if(tk==='preop'){O1(id);return}if(tk==='intraop'){O2(id);return}
   ct=tk;var tp=TP.find(function(t){return t.k===tk});if(!tp)return;
-  var pd=D[id]||{},td=pd[tk]||{};var y1=(tk==="y1"),lt=(tk==="y5"||tk==="y10");
-  var h='<div class="fhdr"><div class="fn">#'+pt.i+' '+pt.n+' \u2014 '+tp.l+'</div><div class="fm">'+pt.g+' \u00b7 '+pt.a+'岁 \u00b7 '+pt.s+'</div></div>';
-  h+='<div class="sec"><div class="st">1. 随访信息</div><div class="row"><span class="lbl">日期</span><input type="date" value="'+(td.fu_date||"")+'" onchange="X(\'fu_date\',this.value)"></div><div class="row"><span class="lbl">方式</span>'+C("fu_method",[{v:"phone",t:"\u{1F4DE}电话"},{v:"clinic",t:"\u{1F3E5}门诊"},{v:"wechat",t:"\u{1F4AC}微信"}],td)+'</div></div>';
-  h+='<div class="sec"><div class="st">2. 疼痛VAS</div>'+VAS("vas_rest","静息痛",td)+VAS("vas_act","活动痛",td)+VAS("vas_night","夜间痛",td)+'</div>';
-  if(y1||lt){h+='<div class="sec"><div class="st">3. MRI \u2605核心</div><div class="row"><span class="lbl">MRI</span>'+C("mri_done",[{v:"yes",t:"\u2705已做"},{v:"no",t:"\u274C未做"}],td)+'</div><div class="row"><span class="lbl">Sugaya</span>'+C("sugaya",[{v:"1",t:"I"},{v:"2",t:"II"},{v:"3",t:"III"},{v:"4",t:"IV"},{v:"5",t:"V"}],td)+'</div><div class="row"><span class="lbl">再撕裂</span>'+C("retear",[{v:"no",t:"\u2717愈合"},{v:"yes",t:"\u2713再撕裂"}],td)+'</div></div>'}
-  h+='<div class="sec"><div class="st">'+(y1||lt?'4':'3')+'. ASES</div>';["穿衣","患侧卧","洗背","如厕","梳头","够高处","提5kg","过顶投掷"].forEach(function(a,i){h+='<div class="row"><span class="lbl">'+a+'</span>'+C("ases_"+i,[{v:"3",t:"正常"},{v:"2",t:"困难"},{v:"1",t:"不能"}],td)+'</div>'});
-  h+='<div class="row"><span class="lbl">受限</span>'+C("ases_limit",[{v:"3",t:"无"},{v:"2",t:"轻度"},{v:"1",t:"中度"},{v:"0",t:"重度"}],td)+'</div></div>';
-  h+='<div class="sec"><div class="st">'+(y1||lt?'5':'4')+'. 关键问题</div>';
-  [{q:"还疼吗?",k:"q_pain",o:[{v:"0",t:"不疼"},{v:"3",t:"轻度"},{v:"6",t:"中度"},{v:"9",t:"很疼"}]},{q:"自理?",k:"q_adl",o:[{v:"full",t:"自理"},{v:"part",t:"部分"},{v:"help",t:"依赖"}]},{q:"满意度",k:"q_satisfaction",o:[{v:"10",t:"10"},{v:"8",t:"8"},{v:"6",t:"6"},{v:"4",t:"4"},{v:"2",t:"2"}]}].forEach(function(q){h+='<div class="row"><span class="lbl">'+q.q+'</span>'+C(q.k,q.o,td)+'</div>'});
-  h+='<div class="sec"><div class="st">'+(y1||lt?'6':'5')+'. 备注</div><input value="'+(td.note||"")+'" onchange="X(\'note\',this.value)" placeholder="特殊情况..." style="width:100%;padding:6px;border:1.5px solid #ddd;border-radius:6px;font-size:11px;font-family:inherit"></div>';
-  h+='<button class="pbtn" onclick="SV()">\u2705 保存 '+tp.l+' 随访</button><button class="sbtn" onclick="CL()">关闭</button>';
+  var pd=D[id]||{},td=pd[tk]||{};var y1=(tk==="y1"),lt=(tk==="y5"||tk==="y10"),early=(tk==="m1"),mid=(tk==="m3"||tk==="m6");
+  var h='<div class="fhdr"><div class="fn">#'+pt.i+' '+pt.n+' — '+tp.l+'</div><div class="fm">'+pt.g+' · '+pt.a+'岁 · '+pt.s+'</div></div>';
+  h+='<div class="sec"><div class="st">1. 随访基本信息</div>';
+  var fuY=0,fuM=0,fuD=0;if(td.fu_date&&td.fu_date.indexOf('-')>=0){var fp=td.fu_date.split('-');fuY=parseInt(fp[0])||0;fuM=parseInt(fp[1])||0;fuD=parseInt(fp[2])||0}h+='<div class="row"><span class="lbl">随访日期</span>'+DS2('fu_date',fuY,fuM,fuD)+'<span class="today-btn" onclick="FT2(\'fu_date\')">📅今天</span></div>';
+  h+='<div class="row"><span class="lbl">随访方式</span>'+C("fu_method",[{v:"phone",t:"📞电话"},{v:"clinic",t:"🏥门诊"},{v:"wechat",t:"💬微信"}],td)+'</div>';
+  h+='<div class="row"><span class="lbl">按时随访</span>'+C("on_time",[{v:"yes",t:"是"},{v:"no",t:"否"}],td)+'</div>';
+  h+='<div class="row"><span class="lbl">依从性</span>'+C("compliance",[{v:"good",t:"良好"},{v:"fair",t:"一般"},{v:"poor",t:"差"}],td)+'</div></div>';
+  h+='<div class="sec"><div class="st">2. 疼痛与症状 <span class="info-btn" onclick="TOI(\'pain_info\')">?</span></div><div class="info-popup" id="pain_info"><div style="font-size:9px">VAS:0=无痛,10=剧痛。1-3轻度 4-6中度 7-10重度</div></div>';
+  h+=VAS("vas_rest","静息痛",td)+VAS("vas_act","活动痛",td)+VAS("vas_night","夜间痛",td);
+  h+='<div class="row"><span class="lbl">疼痛频率</span>'+C("pain_freq",[{v:"never",t:"无"},{v:"occasional",t:"偶有"},{v:"frequent",t:"经常"},{v:"constant",t:"持续"}],td)+'</div>';
+  h+='<div class="row"><span class="lbl">止痛药</span>'+C("pain_med",[{v:"no",t:"无"},{v:"otc",t:"非处方"},{v:"rx",t:"处方药"}],td)+'</div>';
+  h+='<div class="row"><span class="lbl">较术前</span>'+C("pain_vs_pre",[{v:"better",t:"好转"},{v:"same",t:"相似"},{v:"worse",t:"加重"}],td)+'</div>';
+  h+='<div class="row"><span class="lbl">夜间影响睡眠</span>'+C("night_sleep",[{v:"no",t:"否"},{v:"yes",t:"是"}],td)+'</div></div>';
+  if(!early||mid){
+    h+='<div class="sec"><div class="st">3. 恢复情况</div>';
+    if(!early){h+='<div class="row"><span class="lbl">恢复工作</span>'+C("return_work",[{v:"full",t:"完全"},{v:"partial",t:"部分"},{v:"no",t:"否"}],td)+'</div>'}
+    if(mid||y1||lt){h+='<div class="row"><span class="lbl">恢复运动</span>'+C("return_sport",[{v:"full",t:"完全"},{v:"partial",t:"部分"},{v:"no",t:"否"}],td)+'</div>'}
+    h+='</div>';
+  }
+  var sn=early?3:(mid?4:3);
+  if(y1||lt){
+    h+='<div class="sec"><div class="st">'+sn+'. 影像复查(MRI) ★核心</div>';
+    h+='<div class="help warn">PACS用住院号<strong>'+pt.c+'</strong>。Sugaya IV/V=再撕裂</div>';
+    h+='<div class="row"><span class="lbl">MRI</span>'+C("mri_done",[{v:"yes",t:"✅已做"},{v:"no",t:"❌未做"}],td)+'</div>';
+    h+='<div class="row"><span class="lbl">Sugaya</span>'+C("sugaya",[{v:"1",t:"I愈合"},{v:"2",t:"II愈合"},{v:"3",t:"III不足"},{v:"4",t:"IV小撕裂"},{v:"5",t:"V大撕裂"}],td)+'<span class="info-btn" onclick="TOI(\'sugaya_popup\')">?</span></div><div class="info-popup" id="sugaya_popup"><table class="dt"><tr><th>分型</th><th>MRI表现</th><th>判断</th></tr><tr><td>I</td><td>全层厚度正常</td><td style="color:#0d8a3e">✅愈合</td></tr><tr><td>II</td><td>厚度足够</td><td style="color:#0d8a3e">✅愈合</td></tr><tr><td>III</td><td>厚度不足</td><td style="color:#e67e22">⚠️不足</td></tr><tr><td>IV</td><td>小不连续</td><td style="color:#c0392b">❌小撕裂</td></tr><tr><td>V</td><td>大不连续</td><td style="color:#c0392b">❌大撕裂</td></tr></table></div>';
+    h+='<div class="row"><span class="lbl">再撕裂</span>'+CR2("retear",[{v:"no",t:"✗愈合"},{v:"yes",t:"✓再撕裂"}],td)+'</div>';
+    h+='<div class="row"><span class="lbl">Gout SSP</span>'+C("gout_ssp",[{v:"0",t:"0"},{v:"1",t:"1"},{v:"2",t:"2"},{v:"3",t:"3"},{v:"4",t:"4"}],td)+' ISP'+C("gout_isp",[{v:"0",t:"0"},{v:"1",t:"1"},{v:"2",t:"2"},{v:"3",t:"3"},{v:"4",t:"4"}],td)+'<span class="info-btn" onclick="TOI(\'gout_popup\')">?</span></div><div class="info-popup" id="gout_popup"><table class="dt"><tr><th>分级</th><th>脂肪占比</th><th>描述</th></tr><tr><td>0级</td><td>0%</td><td>无脂肪浸润</td></tr><tr><td>1级</td><td>&lt;25%</td><td>少量脂肪条纹</td></tr><tr><td>2级</td><td>25-50%</td><td>脂肪&lt;肌肉</td></tr><tr><td>3级</td><td>50%</td><td>脂肪=肌肉</td></tr><tr><td>4级</td><td>&gt;50%</td><td>脂肪&gt;肌肉</td></tr></table><div style="font-size:8px;margin-top:3px">Darbandi 2025: SSP G2 OR 1.95, G3-4 OR 3.37</div></div>';
+    sn++;
+  }
+  h+='<div class="sec"><div class="st">'+sn+'. ASES功能评分 <span class="info-btn" onclick="TOI(\'ases_info\')">?</span></div><div class="info-popup" id="ases_info"><div style="font-size:9px">ASES=疼痛50+功能50。正常3/困难2/不能1。≥90优 80良 70可 &lt;70差</div></div>';
+  if(!early){["穿衣","患侧卧","洗背","如厕","梳头","够高处","提5kg至肩","过顶投掷"].forEach(function(a,i){h+='<div class="row"><span class="lbl">'+a+'</span>'+C("ases_"+i,[{v:"3",t:"正常"},{v:"2",t:"困难"},{v:"1",t:"不能"}],td)+'</div>'});h+='<div class="row"><span class="lbl">受限</span>'+C("ases_limit",[{v:"3",t:"无"},{v:"2",t:"轻度"},{v:"1",t:"中度"},{v:"0",t:"重度"}],td)+'</div>'}else{h+='<div class="row"><span class="lbl">ASES快速</span>'+C("ases_early",[{v:"good",t:"基本正常"},{v:"fair",t:"部分受限"},{v:"poor",t:"明显受限"}],td)+'</div>'}
+  h+='<div style="display:flex;gap:6px;margin:6px 0"><div style="flex:1;text-align:center;background:#f0f7ff;border-radius:6px;padding:4px"><div style="font-size:9px;color:#666">疼痛分</div><div style="font-size:16px;font-weight:700;color:#1a73e8" id="apd2">'+(td.ases_pain||"--")+'</div><div style="font-size:9px;color:#999">/50</div></div><div style="flex:1;text-align:center;background:#f0f7ff;border-radius:6px;padding:4px"><div style="font-size:9px;color:#666">功能分</div><div style="font-size:16px;font-weight:700;color:#1a73e8" id="afd">'+(td.ases_func||"--")+'</div><div style="font-size:9px;color:#999">/50</div></div><div style="flex:2;text-align:center;background:#e8f0fe;border-radius:6px;padding:4px"><div style="font-size:9px;color:#666">ASES总分</div><div style="font-size:18px;font-weight:700;color:#1a73e8" id="atd">'+(td.ases_total||"--")+'</div><div style="font-size:9px;color:#999">/100</div></div></div><div class="grade" style="justify-content:center;margin-top:2px"><span class="ge">≥90优</span><span class="gg">80-89良</span><span class="gf">70-79可</span><span class="gp">&lt;70差</span></div></div>';sn++;
+  if(y1||lt){
+    h+='<div class="sec"><div class="st">'+sn+'. Constant评分</div>';
+    h+='<div class="row"><span class="lbl">疼痛</span>'+C("cs_pain",[{v:"15",t:"无15"},{v:"10",t:"轻10"},{v:"5",t:"中5"},{v:"0",t:"重0"}],td)+'</div>';
+    h+='<div class="row"><span class="lbl">工作</span>'+C("cs_work",[{v:"4",t:"恢复4"},{v:"2",t:"减半2"},{v:"0",t:"不能0"}],td)+' 运动'+C("cs_sport",[{v:"4",t:"恢复4"},{v:"2",t:"减半2"},{v:"0",t:"不能0"}],td)+'</div>';
+    h+='<div class="row"><span class="lbl">睡眠</span>'+C("cs_sleep",[{v:"2",t:"不受2"},{v:"1",t:"偶尔1"},{v:"0",t:"经常0"}],td)+' 高度'+C("cs_reach",[{v:"10",t:"过头10"},{v:"8",t:"头顶8"},{v:"6",t:"颈6"},{v:"4",t:"胸4"},{v:"2",t:"腰2"}],td)+'</div>';
+    var cst=td.constant;h+='<div class="row" style="background:#f0f7ff;padding:4px 8px;border-radius:6px"><span class="lbl">Constant</span><span style="font-size:16px;font-weight:700;color:#1a73e8;min-width:40px;text-align:center" id="csd">'+(cst||"--")+'</span><span style="font-size:10px;color:#999">/100 (电话版满分35)</span></div></div>';
+    sn++;
+  }
+  var qs=[{q:"还疼吗?",k:"q_pain",o:[{v:"0",t:"不疼"},{v:"3",t:"轻度"},{v:"6",t:"中度"},{v:"9",t:"很疼"}]}];
+  if(!early)qs.push({q:"突然无力/再受伤?",k:"q_reinjury",o:[{v:"no",t:"无"},{v:"yes",t:"有"}]});
+  qs.push({q:"自理?",k:"q_adl",o:[{v:"full",t:"完全"},{v:"part",t:"部分"},{v:"help",t:"依赖"}]});
+  if(mid||y1||lt)qs.push({q:"恢复工作/运动?",k:"q_recovery",o:[{v:"full",t:"完全"},{v:"most",t:"大部"},{v:"half",t:"一半"},{v:"little",t:"很少"},{v:"none",t:"没恢复"}]});
+  qs.push({q:"再手术?",k:"q_reop",o:[{v:"no",t:"无"},{v:"revision",t:"翻修"},{v:"rtsa",t:"反肩置换"}]});
+  qs.push({q:"并发症?",k:"q_complication",o:[{v:"no",t:"无"},{v:"infection",t:"感染"},{v:"stiffness",t:"僵硬"},{v:"anchor",t:"锚钉"},{v:"other",t:"其他"}]});
+  if(!early)qs.push({q:"满意度(1-10)",k:"q_satisfaction",o:[{v:"10",t:"10"},{v:"8",t:"8"},{v:"6",t:"6"},{v:"4",t:"4"},{v:"2",t:"2"}]});
+  h+='<div class="sec"><div class="st">'+sn+'. 关键问题</div>';
+  qs.forEach(function(q){h+='<div class="row"><span class="lbl">'+q.q+'</span>'+C(q.k,q.o,td)+'</div>'});h+='</div>';sn++;
+  if(!early||mid||y1||lt){
+    h+='<div class="sec"><div class="st">'+sn+'. ROM与肌力(门诊)</div>';
+    h+='<div class="row"><span class="lbl">前屈</span><input type="number" value="'+(td.rom_flex||"")+'" onchange="X(\'rom_flex\',this.value)" style="width:50px">° <span class="lbl" style="margin-left:6px">外展</span><input type="number" value="'+(td.rom_abd||"")+'" onchange="X(\'rom_abd\',this.value)" style="width:50px">°</div>';
+    h+='<div class="row"><span class="lbl">外旋</span><input type="number" value="'+(td.rom_er||"")+'" onchange="X(\'rom_er\',this.value)" style="width:50px">° <span class="lbl" style="margin-left:6px">内旋</span>'+C("rom_ir",[{v:"T7",t:"T7"},{v:"T12",t:"T12"},{v:"L5",t:"L5"},{v:"臀部",t:"臀部"}],td)+'</div>';
+    h+='<div class="row"><span class="lbl">前屈肌力</span>'+C("mmt_flex",[{v:"5",t:"5"},{v:"4",t:"4"},{v:"3",t:"3"},{v:"2",t:"2"},{v:"1",t:"1"}],td)+' <span class="lbl" style="margin-left:6px">外展肌力</span>'+C("mmt_abd",[{v:"5",t:"5"},{v:"4",t:"4"},{v:"3",t:"3"},{v:"2",t:"2"},{v:"1",t:"1"}],td)+'</div></div>';sn++;
+  }
+  h+='<div class="sec"><div class="st">'+sn+'. 备注</div><input value="'+(td.note||"")+'" onchange="X(\'note\',this.value)" placeholder="特殊情况/并发症/用药..." style="width:100%;padding:6px;border:1.5px solid #ddd;border-radius:6px;font-size:11px;font-family:inherit">';
+  h+='<div class="row" style="margin-top:4px"><span class="lbl">用药</span><input value="'+(td.meds||"")+'" onchange="X(\'meds\',this.value)" placeholder="止痛/降糖/降压等" style="flex:1;padding:5px 6px;border:1.5px solid #ddd;border-radius:6px;font-size:11px;font-family:inherit"></div></div>';
+  h+='<button class="pbtn" onclick="SV()">✅ 保存 '+tp.l+' 随访</button><button class="sbtn" onclick="CLR('+id+',\''+tk+'\')" style="color:#c0392b">🗑️ 清除</button><button class="sbtn" onclick="CL()">关闭</button>';
+  document.getElementById("fc").innerHTML=h;CA2();document.getElementById("md").classList.add("on");document.body.style.overflow="hidden";
+}
+function TOI(id){var el=document.getElementById(id);el.classList.toggle("on")}
+function CR2(key,opts,data){var val=data[key]!==undefined?String(data[key]):"";return'<span class="cg">'+opts.map(function(o){var cls='c';if(String(o.v)===val){cls+=' on';if(o.v==='no')cls+=' grn';else cls+=' red'}return'<span class="'+cls+'" onclick="var p=this.parentElement;p.querySelectorAll(\'.c\').forEach(function(c){c.classList.remove(\'on\',\'grn\',\'red\')});this.classList.add(\'on\');X(\''+key+'\',\''+o.v+'\');CA2()">'+o.t+'</span>'}).join("")+'</span>'}
+function C(key,opts,data){var val=data[key]!==undefined?String(data[key]):"";return'<span class="cg">'+opts.map(function(o){return'<span class="c'+(String(o.v)===val?' on':'')+'" onclick="var p=this.parentElement;p.querySelectorAll(\'.c\').forEach(function(c){c.classList.remove(\'on\')});this.classList.add(\'on\');X(\''+key+'\',\''+o.v+'\');CA2()">'+o.t+'</span>'}).join("")+'</span>'}
+function VAS(key,label,data){var val=data[key]||0;return'<div class="row"><span class="lbl">'+label+'</span><span style="font-weight:700;color:#1a73e8;min-width:28px">'+val+'/10</span><input type="range" min="0" max="10" value="'+val+'" oninput="this.parentElement.querySelector(\'span\').textContent=this.value+\'/10\';X(\''+key+'\',this.value);CA2()" style="flex:1"></div>'}
+function X(key,value){if(!cp||!ct)return;if(!D[cp.i])D[cp.i]={};if(!D[cp.i][ct])D[cp.i][ct]={};D[cp.i][ct][key]=value}
+function CA2(){if(!cp||!ct)return;if(!D[cp.i])D[cp.i]={};if(!D[cp.i][ct])D[cp.i][ct]={};var td=D[cp.i][ct];var v1=parseInt(td.vas_rest)||0,v2=parseInt(td.vas_act)||0,v3=parseInt(td.vas_night)||0;var ps=Math.max(0,Math.round((30-v1-v2-v3)/30*50));var fs=0;for(var i=0;i<8;i++)fs+=(parseInt(td["ases_"+i])||0);fs+=parseInt(td.ases_limit)||0;fs=Math.round(fs/27*50);var total=ps+fs;td.ases_pain=ps;td.ases_func=fs;td.ases_total=total;["apd2","afd","atd"].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=(id=="apd2"?ps:id=="afd"?fs:total)||"--"});X("ases_pain",ps);X("ases_func",fs);X("ases_total",total);var cs=(parseInt(td.cs_pain)||0)+(parseInt(td.cs_work)||0)+(parseInt(td.cs_sport)||0)+(parseInt(td.cs_sleep)||0)+(parseInt(td.cs_reach)||0);X("constant",cs);var ce=document.getElementById("csd");if(ce)ce.textContent=cs||"--"}
+function SV(){if(!cp||!ct)return;CA2();D[cp.i][ct]._done=true;D[cp.i][ct]._savedAt=new Date().toISOString();localStorage.setItem("rc_fu_v7",JSON.stringify(D));CL();R();MT("\u2705 已保存")}
+function CL(){document.getElementById("md").classList.remove("on");document.body.style.overflow="";ct=null}
+function CLR(id,tk){if(!confirm("确定清除该时间点数据?"))return;if(D[id]){delete D[id][tk];localStorage.setItem("rc_fu_v7",JSON.stringify(D))}CL();R();MT("已清除")}
+function DS2(k,y,m,d){var cy=new Date().getFullYear();var yo='<option value="">年</option>';for(var i=cy-12;i<=cy+1;i++)yo+='<option value="'+i+'"'+(i===y?' selected':'')+'>'+i+'年</option>';var mo='<option value="">月</option>';for(var i=1;i<=12;i++)mo+='<option value="'+i+'"'+(i===m?' selected':'')+'>'+i+'月</option>';var dd='<option value="">日</option>';for(var i=1;i<=31;i++)dd+='<option value="'+i+'"'+(i===d?' selected':'')+'>'+i+'日</option>';return'<select style="padding:4px 5px;border:1.5px solid #ddd;border-radius:6px;font-size:10px;font-family:inherit;outline:none;background:#fff" onchange="UD2()" data-pt="y" data-k="'+k+'">'+yo+'</select><select style="padding:4px 5px;border:1.5px solid #ddd;border-radius:6px;font-size:10px;font-family:inherit;outline:none;background:#fff" onchange="UD2()" data-pt="m" data-k="'+k+'">'+mo+'</select><select style="padding:4px 5px;border:1.5px solid #ddd;border-radius:6px;font-size:10px;font-family:inherit;outline:none;background:#fff" onchange="UD2()" data-pt="d" data-k="'+k+'">'+dd+'</select>'}
+function UD2(){var y=0,m=0,d=0;document.querySelectorAll("select[data-k='fu_date']").forEach(function(s){if(s.dataset.pt==='y')y=parseInt(s.value)||0;if(s.dataset.pt==='m')m=parseInt(s.value)||0;if(s.dataset.pt==='d')d=parseInt(s.value)||0});if(y&&m&&d){X('fu_date',y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0'))}}
+function FT2(k){var now=new Date(),y=now.getFullYear(),m=now.getMonth()+1,d=now.getDate();document.querySelectorAll("select[data-k='"+k+"']").forEach(function(s){if(s.dataset.pt==='y')s.value=y;if(s.dataset.pt==='m')s.value=m;if(s.dataset.pt==='d')s.value=d});UD2()}
+function showAddPatient(){
+  var h='<div class="fhdr"><div class="fn">➕ 添加新患者</div></div>';
+  h+='<div class="sec"><div class="st">基本信息</div>';
+  h+='<div class="row"><span class="lbl">姓名</span><input id="ap_n" placeholder="必填" style="flex:1;padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit"></div>';
+  h+='<div class="row"><span class="lbl">性别</span><select id="ap_g" style="padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px"><option value="男">男</option><option value="女">女</option></select></div>';
+  h+='<div class="row"><span class="lbl">年龄</span><input type="number" id="ap_a" placeholder="岁" style="width:70px;padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px"></div>';
+  h+='<div class="row"><span class="lbl">住院号</span><input id="ap_c" placeholder="必填" style="flex:1;padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit"></div>';
+  h+='<div class="row"><span class="lbl">手术日期</span><input type="date" id="ap_s" style="padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px"></div>';
+  h+='<div class="row"><span class="lbl">手术名称</span><input id="ap_o" placeholder="肩关节镜下肩袖修补术" style="flex:1;padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit"></div>';
+  h+='<div class="row"><span class="lbl">电话</span><input id="ap_h" placeholder="患者电话" style="flex:1;padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit"></div>';
+  h+='<div class="row"><span class="lbl">诊断</span><input id="ap_d" placeholder="肩袖肌腱损伤" style="flex:1;padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit"></div>';
+  h+='<div class="row"><span class="lbl">糖尿病</span><select id="ap_dm" style="padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px"><option value="0">无</option><option value="1">有</option></select><span class="lbl" style="margin-left:8px">高血压</span><select id="ap_ht" style="padding:5px 8px;border:1.5px solid #ddd;border-radius:6px;font-size:12px"><option value="0">无</option><option value="1">有</option></select></div></div>';
+  h+='<button class="pbtn" onclick="saveNewPatient()">✅ 添加</button><button class="sbtn" onclick="CL()">取消</button>';
   document.getElementById("fc").innerHTML=h;document.getElementById("md").classList.add("on");document.body.style.overflow="hidden";
 }
-
-function C(key,opts,data){var val=data[key]!==undefined?String(data[key]):"";return'<span class="cg">'+opts.map(function(o){return'<span class="c'+(String(o.v)===val?' on':'')+'" onclick="var p=this.parentElement;p.querySelectorAll(\'.c\').forEach(function(c){c.classList.remove(\'on\')});this.classList.add(\'on\');X(\''+key+'\',\''+o.v+'\')">'+o.t+'</span>'}).join("")+'</span>'}
-function VAS(key,label,data){var val=data[key]||0;return'<div class="row"><span class="lbl">'+label+'</span><span style="font-weight:700;color:#1a73e8;min-width:28px">'+val+'/10</span><input type="range" min="0" max="10" value="'+val+'" oninput="this.parentElement.querySelector(\'span\').textContent=this.value+\'/10\';X(\''+key+'\',this.value)" style="flex:1"></div>'}
-function X(key,value){if(!cp||!ct)return;if(!D[cp.i])D[cp.i]={};if(!D[cp.i][ct])D[cp.i][ct]={};D[cp.i][ct][key]=value}
-function SV(){if(!cp||!ct)return;D[cp.i][ct]._done=true;D[cp.i][ct]._savedAt=new Date().toISOString();localStorage.setItem("rc_fu_v7",JSON.stringify(D));CL();R();MT("\u2705 已保存")}
-function CL(){document.getElementById("md").classList.remove("on");document.body.style.overflow="";ct=null}
-function MT(msg){var t=document.getElementById("to");t.textContent=msg;t.classList.add("on");setTimeout(function(){t.classList.remove("on")},2000)}
+var customPatients=JSON.parse(localStorage.getItem("rc_custom_pts")||"[]");
+function getAllPatients(){return P.concat(customPatients)}
+function saveNewPatient(){
+  var n=document.getElementById("ap_n").value.trim(),c2=document.getElementById("ap_c").value.trim();
+  if(!n||!c2){MT("姓名和住院号必填");return}
+  var pt={i:P.length+customPatients.length+1,n:n,g:document.getElementById("ap_g").value,a:parseInt(document.getElementById("ap_a").value)||0,c:c2,s:document.getElementById("ap_s").value,o:document.getElementById("ap_o").value.trim(),d:document.getElementById("ap_d").value.trim(),h:document.getElementById("ap_h").value.trim(),p:"",r:"",x:"",dm:document.getElementById("ap_dm").value==="1",ht:document.getElementById("ap_ht").value==="1"};
+  customPatients.push(pt);localStorage.setItem("rc_custom_pts",JSON.stringify(customPatients));CL();R();MT("✅ 已添加: "+n);
+}
+function deletePatient(id){if(!confirm("确定删除该患者?"))return;customPatients=customPatients.filter(function(p){return p.i!==id});localStorage.setItem("rc_custom_pts",JSON.stringify(customPatients));delete D[id];localStorage.setItem("rc_fu_v7",JSON.stringify(D));R();MT("已删除")}
+function MT(msg){
+var t=document.getElementById("to");t.textContent=msg;t.classList.add("on");setTimeout(function(){t.classList.remove("on")},2000)}
 function V(p){if(sb==="date")return p.s||"";if(sb==="age")return p.a||0;return""}
 function S(s){if(sb===s){sd=-sd}else{sd=1}sb=s;var L={date:"手术日期",age:"年龄"};document.querySelectorAll(".sort-btn").forEach(function(b){b.classList.remove("on");var k=b.id.replace("sb_","");b.textContent=L[k]||k});var el=document.getElementById("sb_"+s);el.classList.add("on");el.textContent=L[s]+(sd===1?" \u2191":" \u2193");R()}
-function T(v){ftp=v;R()}
+function T(v){ftp=v;if(cur==="dash")RD();else R()}
+function ST(t){cur=t;document.querySelectorAll(".tab").forEach(function(b){b.classList.remove("on")});document.getElementById(t==="list"?"tabList":"tabDash").classList.add("on");if(t==="dash"){RD()}else{R()}}
+function RD(){
+  document.getElementById("pl").style.display="none";document.getElementById("dashPanel").style.display="block";
+  var fl=G(),all=fl.length,totalFU=0,totalDone=0,retears=0,ages=[],asesVals=[],satisVals=[],vasVals=[];
+  fl.forEach(function(p){ages.push(p.a);var pd=D[p.i]||{};TP.forEach(function(t){totalFU++;if(pd[t.k]&&pd[t.k]._done){totalDone++;if(pd[t.k].retear==="yes")retears++;if(pd[t.k].ases_total)asesVals.push(parseInt(pd[t.k].ases_total));if(pd[t.k].q_satisfaction)satisVals.push(parseInt(pd[t.k].q_satisfaction));if(pd[t.k].vas_rest!==undefined)vasVals.push([parseInt(pd[t.k].vas_rest)||0,parseInt(pd[t.k].vas_act)||0,parseInt(pd[t.k].vas_night)||0])}})});
+  ages.sort(function(a,b){return a-b});var avgAge=all?Math.round(ages.reduce(function(a,b){return a+b},0)/all):0;
+  var ageGroups={};ages.forEach(function(a){var g=Math.floor(a/10)*10;ageGroups[g]=(ageGroups[g]||0)+1});
+  var dm=fl.filter(function(p){return p.dm}).length,ht=fl.filter(function(p){return p.ht}).length,male=fl.filter(function(p){return p.g==="男"}).length,female=all-male;
+  var ap=0,af=0,ag=0,ae=0;asesVals.forEach(function(v){if(v<70)ap++;else if(v<80)af++;else if(v<90)ag++;else ae++});
+  var sl=0,sm=0,sh=0;satisVals.forEach(function(v){if(v<=4)sl++;else if(v<=8)sm++;else sh++});
+  var vaAvg=[0,0,0];vasVals.forEach(function(v){vaAvg[0]+=v[0];vaAvg[1]+=v[1];vaAvg[2]+=v[2]});if(vasVals.length>0){vaAvg[0]=Math.round(vaAvg[0]/vasVals.length*10)/10;vaAvg[1]=Math.round(vaAvg[1]/vasVals.length*10)/10;vaAvg[2]=Math.round(vaAvg[2]/vasVals.length*10)/10}
+  var tpCounts={};TP.forEach(function(t){tpCounts[t.k]=0});fl.forEach(function(p){var pd=D[p.i]||{};TP.forEach(function(t){if(pd[t.k]&&pd[t.k]._done)tpCounts[t.k]++})});
+  var fuDone=fl.filter(function(p){return cd(D[p.i]||{})===6}).length,fuNone=fl.filter(function(p){return cd(D[p.i]||{})===0}).length,fuProgress=all-fuDone-fuNone;
+  var h='<div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#1a5276">📊 统筹表'+(ftp?' <span style="background:#e67e22;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px">'+ftp+'</span>':'')+'</div>';
+  h+='<table class="dt"><tr><th colspan="6">📋 基本概况</th></tr><tr><td style="font-weight:600">总数</td><td style="color:#1a73e8;font-weight:700;font-size:13px">'+all+'</td><td style="font-weight:600">男/女</td><td>'+male+'/'+female+'</td><td style="font-weight:600">平均年龄</td><td style="color:#1a73e8;font-weight:700">'+avgAge+'岁</td></tr><tr><td style="font-weight:600">年龄范围</td><td>'+(ages[0]||"-")+'-'+(ages[ages.length-1]||"-")+'岁</td><td style="font-weight:600">糖尿病</td><td>'+dm+'('+(all?Math.round(dm/all*100):0)+'%)</td><td style="font-weight:600">高血压</td><td>'+ht+'('+(all?Math.round(ht/all*100):0)+'%)</td></tr></table>';
+  if(Object.keys(ageGroups).length>0){h+='<table class="dt"><tr><th colspan="3">📈 年龄分布</th></tr>';Object.keys(ageGroups).sort(function(a,b){return a-b}).forEach(function(g){var c=ageGroups[g];h+='<tr><td style="font-weight:600">'+g+'-'+(parseInt(g)+9)+'岁</td><td>'+c+'人</td><td>'+(all?Math.round(c/all*100):0)+'%</td></tr>'});h+='</table>'}
+  h+='<table class="dt"><tr><th colspan="4">📋 随访进度 ('+totalDone+'/'+totalFU+'人次, '+(all?Math.round(totalDone/totalFU*100):0)+'%)</th></tr><tr style="font-weight:600"><td>时间点</td><td>已完成</td><td>完成率</td><td>状态</td></tr>';
+  TP.forEach(function(t){var c=tpCounts[t.k],p=all?Math.round(c/all*100):0,st=c===all?'✅全部完成':c>all*0.8?'🟢大部分':c>0?'🟡部分':'🔴未开始';h+='<tr><td style="font-weight:600">'+t.l+'</td><td>'+c+'</td><td>'+p+'%</td><td>'+st+'</td></tr>'});
+  h+='<tr style="background:#f0f7ff;font-weight:600"><td>合计</td><td>'+totalDone+'/'+totalFU+'</td><td>'+(all?Math.round(totalDone/totalFU*100):0)+'%</td><td>未开始:'+fuNone+' 进行中:'+fuProgress+' 全完成:'+fuDone+'</td></tr></table>';
+  h+='<table class="dt"><tr><th colspan="5">🔴 疼痛VAS (n='+vasVals.length+')</th></tr><tr style="font-weight:600"><td>类型</td><td>平均分</td><td>0-3(轻)</td><td>4-6(中)</td><td>7-10(重)</td></tr>';
+  [{l:"静息痛",k:0},{l:"活动痛",k:1},{l:"夜间痛",k:2}].forEach(function(v){var l=0,m=0,h2=0;vasVals.forEach(function(d){var s=d[v.k];if(s<=3)l++;else if(s<=6)m++;else h2++});h+='<tr><td style="font-weight:600">'+v.l+'</td><td style="color:#1a73e8;font-weight:700">'+(vasVals.length?vaAvg[v.k]:"-")+'</td><td>'+l+'</td><td>'+m+'</td><td>'+h2+'</td></tr>'});
+  if(vasVals.length===0)h+='<tr><td colspan="5" style="text-align:center;color:#999">暂无数据</td></tr>';h+='</table>';
+  h+='<table class="dt"><tr><th colspan="3">🎯 ASES评分'+(asesVals.length?' (平均'+Math.round(asesVals.reduce(function(a,b){return a+b},0)/asesVals.length)+'分, n='+asesVals.length+')':'')+'</th></tr><tr style="font-weight:600"><td>等级</td><td>人数</td><td>占比</td></tr>';
+  [{l:"优 ≥90",v:ae,c:"#0d8a3e"},{l:"良 80-89",v:ag,c:"#1a73e8"},{l:"可 70-79",v:af,c:"#e67e22"},{l:"差 <70",v:ap,c:"#c0392b"}].forEach(function(g){var an=ae+ag+af+ap;h+='<tr><td style="font-weight:600;color:'+g.c+'">'+g.l+'</td><td>'+g.v+'</td><td>'+(an?Math.round(g.v/an*100):0)+'%</td></tr>'});
+  if(asesVals.length===0)h+='<tr><td colspan="3" style="text-align:center;color:#999">暂无数据</td></tr>';h+='</table>';
+  h+='<table class="dt"><tr><th colspan="3">😊 满意度'+(satisVals.length?' (平均'+(Math.round(satisVals.reduce(function(a,b){return a+b},0)/satisVals.length*10)/10)+'分, n='+satisVals.length+')':'')+'</th></tr><tr style="font-weight:600"><td>等级</td><td>人数</td><td>占比</td></tr>';
+  [{l:"满意(10分)",v:sh},{l:"一般(6-8)",v:sm},{l:"不满意(≤4)",v:sl}].forEach(function(g){var sn=sh+sm+sl;h+='<tr><td style="font-weight:600">'+g.l+'</td><td>'+g.v+'</td><td>'+(sn?Math.round(g.v/sn*100):0)+'%</td></tr>'});
+  if(satisVals.length===0)h+='<tr><td colspan="3" style="text-align:center;color:#999">暂无数据</td></tr>';h+='</table>';
+  h+='<table class="dt"><tr><th colspan="3">⚠️ 再撕裂</th></tr><tr style="font-weight:600"><td>状态</td><td>人数</td><td>占比</td></tr><tr><td style="font-weight:600;color:#c0392b">再撕裂</td><td style="color:#c0392b;font-weight:700">'+retears+'</td><td>'+(all?Math.round(retears/all*100):0)+'%</td></tr><tr><td style="font-weight:600;color:#0d8a3e">愈合/未记录</td><td>'+(all-retears)+'</td><td>'+(all?Math.round((all-retears)/all*100):0)+'%</td></tr></table>';
+  document.getElementById("dashPanel").innerHTML=h;document.getElementById("dashPanel").classList.add("on");
+}
 
 function O1(id){
   var pt=P.find(function(p){return p.i===id});if(!pt)return;cp=pt;var bl=BL[id]||{};
-  var h='<div class="fhdr"><div class="fn">\u{1F4CB} 术前评估 \u2014 #'+pt.i+' '+pt.n+'</div><div class="fm">'+pt.g+' \u00b7 '+pt.a+'岁 \u00b7 '+pt.s+'</div></div>';
+  var h='<div class="fhdr"><div class="fn">📋 术前评估 \u2014 #'+pt.i+' '+pt.n+'</div><div class="fm">'+pt.g+' \u00b7 '+pt.a+'岁 \u00b7 '+pt.s+'</div></div>';
   h+='<div class="sec"><div class="st">1. 体格与病史</div>';
   h+='<div class="row"><span class="lbl">身高</span><input id="o1_h" value="'+(bl.height||"")+'" style="width:55px">cm <span class="lbl" style="margin-left:6px">体重</span><input id="o1_w" value="'+(bl.weight||"")+'" style="width:55px">kg</div>';
   h+='<div class="row"><span class="lbl">患侧</span><select id="o1_side"><option value="">-</option><option value="左"'+(bl.side=="左"?" selected":"")+'>左</option><option value="右"'+(bl.side=="右"?" selected":"")+'>右</option></select><span class="lbl" style="margin-left:6px">优势侧</span><select id="o1_dom"><option value="">-</option><option value="左"'+(bl.dominant=="左"?" selected":"")+'>左</option><option value="右"'+(bl.dominant=="右"?" selected":"")+'>右</option></select></div>';
@@ -148,7 +275,7 @@ function O1(id){
 
 function O2(id){
   var pt=P.find(function(p){return p.i===id});if(!pt)return;cp=pt;var bl=BL[id]||{};
-  var h='<div class="fhdr"><div class="fn">\u{1F527} 术中情况 \u2014 #'+pt.i+' '+pt.n+'</div><div class="fm">'+pt.g+' \u00b7 '+pt.a+'岁 \u00b7 '+pt.s+'</div></div>';
+  var h='<div class="fhdr"><div class="fn">🔧 术中情况 \u2014 #'+pt.i+' '+pt.n+'</div><div class="fm">'+pt.g+' \u00b7 '+pt.a+'岁 \u00b7 '+pt.s+'</div></div>';
   h+='<div class="sec"><div class="st">1. 手术信息</div>';
   h+='<div class="row"><span class="lbl">修复技术</span><select id="o2_tech"><option value="">-</option><option value="单排(SR)"'+(bl.technique=="单排(SR)"?" selected":"")+'>单排(SR)</option><option value="双排(DR)"'+(bl.technique=="双排(DR)"?" selected":"")+'>双排(DR)</option><option value="缝线桥(SB)"'+(bl.technique=="缝线桥(SB)"?" selected":"")+'>缝线桥(SB)</option></select></div>';
   h+='<div class="row"><span class="lbl">锚钉数</span><input id="o2_anchors" value="'+(bl.anchors||"")+'" style="width:40px">枚 <span class="lbl" style="margin-left:6px">张力</span><select id="o2_tension"><option value="">-</option><option value="低"'+(bl.tension=="低"?" selected":"")+'>低</option><option value="中"'+(bl.tension=="中"?" selected":"")+'>中</option><option value="高"'+(bl.tension=="高"?" selected":"")+'>高</option></select></div>';
@@ -173,7 +300,7 @@ function O2(id){
 function SV1(id){if(!BL[id])BL[id]={};["height","weight","side","dominant","injury","duration","smoking","activity","osteoporosis","steroid","tear_size","tendons","patte","gout_ssp","gout_isp","tangent","bigliani","csa","ahd","ases_pre","constant_pre","vas_rest_pre","vas_act_pre","vas_night_pre"].forEach(function(k,i){var ids=["o1_h","o1_w","o1_side","o1_dom","o1_injury","o1_dur","o1_smoke","o1_act","o1_osteo","o1_steroid","o1_tear","o1_tendons","o1_patte","o1_gssp","o1_gisp","o1_tang","o1_big","o1_csa","o1_ahd","o1_ases","o1_cs","o1_vasr","o1_vasa","o1_vasn"];var el=document.getElementById(ids[i]);if(el)BL[id][k]=el.value});localStorage.setItem("rc_baseline",JSON.stringify(BL));CL();R();MT("\u2705 术前评估已保存")}
 function SV2(id){if(!BL[id])BL[id]={};["technique","anchors","tension","completeness","tissue_quality","anesthesia","txa","surgery_duration","tear_type","cartilage","biceps","view_quality","acromioplasty","lhbt","concurrent"].forEach(function(k,i){var ids=["o2_tech","o2_anchors","o2_tension","o2_complete","o2_quality","o2_anes","o2_txa","o2_dur","o2_teartype","o2_cart","o2_biceps","o2_view","o2_acr","o2_lhbt","o2_conc"];var el=document.getElementById(ids[i]);if(el)BL[id][k]=el.value});localStorage.setItem("rc_baseline",JSON.stringify(BL));CL();R();MT("\u2705 术中情况已保存")}
 
-function E(){var rows=[["ID","姓名","性别","年龄","住院号","手术日期","时间点","随访日期","再撕裂","Sugaya","备注"]];P.forEach(function(p){var pd=D[p.i]||{};TP.forEach(function(t){var td=pd[t.k]||{};if(!td._done)return;rows.push([p.i,p.n,p.g,p.a,p.c,p.s,t.l,td.fu_date||"",td.retear=="yes"?"是":"否",td.sugaya||"",td.note||""])})});var csv="\uFEFF"+rows.map(function(r){return r.map(function(c){return'"'+(c||"")+'"'}).join(",")}).join("\n");var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="随访数据.csv";a.click()}
+function E(){var rows=[["ID","姓名","性别","年龄","住院号","手术日期","时间点","随访日期","再撕裂","Sugaya","备注"]];getAllPatients().forEach(function(p){var pd=D[p.i]||{};TP.forEach(function(t){var td=pd[t.k]||{};if(!td._done)return;rows.push([p.i,p.n,p.g,p.a,p.c,p.s,t.l,td.fu_date||"",td.retear=="yes"?"是":"否",td.sugaya||"",td.note||""])})});var csv="\uFEFF"+rows.map(function(r){return r.map(function(c){return'"'+(c||"")+'"'}).join(",")}).join("\n");var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="随访数据.csv";a.click()}
 document.getElementById("mb").addEventListener("click",CL);
 R();
 

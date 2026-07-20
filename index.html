@@ -1017,14 +1017,17 @@ if (!isDesktop && pf) {
 // Always show the app-container
 document.querySelector('.app-container').style.display = 'flex';
 
-// Toggle groups
+// Toggle groups - handle both click and touch for iOS
 document.querySelectorAll('.toggle-group').forEach(group => {
-  group.addEventListener('click', (e) => {
+  function handle(e) {
+    e.preventDefault();
     if (e.target.classList.contains('toggle-btn')) {
       group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
     }
-  });
+  }
+  group.addEventListener('click', handle);
+  group.addEventListener('touchstart', handle, {passive: false});
 });
 
 function getToggleVal(id) {

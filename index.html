@@ -999,6 +999,10 @@
 <script>
 // --- Platform ---
 const isDesktop = window.matchMedia('(min-width: 768px) and (min-height: 900px)').matches;
+
+// Clone cards to mobile FIRST (before removing phone-frame on mobile)
+document.getElementById('mobileBody').innerHTML = document.getElementById('appBody').innerHTML;
+
 if (isDesktop) {
   document.querySelector('.phone-frame').style.display = 'flex';
   const now = new Date();
@@ -1009,9 +1013,6 @@ if (isDesktop) {
   document.getElementById('mobileApp').style.display = 'flex';
   document.querySelector('.result-sheet').style.maxWidth = '100%';
 }
-
-// Clone cards to mobile (always, regardless of platform)
-document.getElementById('mobileBody').innerHTML = document.getElementById('appBody').innerHTML;
 
 // Toggle groups
 document.querySelectorAll('.toggle-group').forEach(group => {

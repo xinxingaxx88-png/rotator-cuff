@@ -45,14 +45,12 @@
   }
 
   /* Phone Frame (Desktop) */
-  .phone-frame { display: none; }
+  .phone-frame { display: flex; flex-direction: column; width: 100%; min-height: 100vh; background: var(--bg); }
   @media (min-width: 768px) and (min-height: 900px) {
     .phone-frame {
-      display: flex;
-      flex-direction: column;
       width: var(--phone-w);
       height: var(--phone-h);
-      background: var(--bg);
+      min-height: auto;
       border-radius: 44px;
       overflow: hidden;
       box-shadow: 0 0 0 8px #1a1a1c, 0 0 0 10px #2d2d30, 0 0 0 12px #1a1a1c, 0 20px 60px rgba(0,0,0,0.4);
@@ -998,21 +996,26 @@
 
 <script>
 // --- Platform ---
-const isDesktop = window.matchMedia('(min-width: 768px) and (min-height: 900px)').matches;
-
-// Clone cards to mobile FIRST (before removing phone-frame on mobile)
-document.getElementById('mobileBody').innerHTML = document.getElementById('appBody').innerHTML;
-
-if (isDesktop) {
-  document.querySelector('.phone-frame').style.display = 'flex';
-  const now = new Date();
-  document.getElementById('status-time').textContent =
-    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-} else {
-  var pf=document.querySelector('.phone-frame');if(pf)pf.remove();
-  document.getElementById('mobileApp').style.display = 'flex';
-  var rs=document.querySelector('.result-sheet');if(rs)rs.style.maxWidth = '100%';
+var isDesktop = window.matchMedia('(min-width: 768px) and (min-height: 900px)').matches;
+var pf = document.querySelector('.phone-frame');
+if (!isDesktop && pf) {
+  // Mobile: remove phone frame decorations
+  pf.style.width = '100%';
+  pf.style.height = '100vh';
+  pf.style.borderRadius = '0';
+  pf.style.boxShadow = 'none';
+  pf.style.display = 'flex';
+  var notch = pf.querySelector('.phone-notch'); if(notch) notch.remove();
+  var status = pf.querySelector('.phone-status'); if(status) status.remove();
+  var home = pf.querySelector('.phone-home'); if(home) home.remove();
+} else if (isDesktop && pf) {
+  pf.style.display = 'flex';
+  var now = new Date();
+  var timeEl = document.getElementById('status-time');
+  if (timeEl) timeEl.textContent = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
 }
+// Always show the app-container
+document.querySelector('.app-container').style.display = 'flex';
 
 // Toggle groups
 document.querySelectorAll('.toggle-group').forEach(group => {
@@ -1306,15 +1309,11 @@ function closeHelp() {
   document.body.style.overflow = '';
 }
 document.getElementById('btnHelp').addEventListener('click', openHelp);
-document.getElementById('btnMobileHelp').addEventListener('click', openHelp);
 document.getElementById('helpBackdrop').addEventListener('click', closeHelp);
 document.getElementById('btnCloseHelp').addEventListener('click', closeHelp);
 
 // Button events
 document.getElementById('btnCalculate').addEventListener('click', calculateRisk);
-if (!isDesktop) {
-  document.getElementById('btnMobileCalculate').addEventListener('click', calculateRisk);
-}
 
 // Service worker
 if ('serviceWorker' in navigator) {

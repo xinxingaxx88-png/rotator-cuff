@@ -459,7 +459,7 @@
       <span class="header-icon">🦾</span>
       <h1>肩袖再撕裂风险计算器</h1>
       <p class="subtitle">多中心循证模型 · 基于10+篇系统评价/Meta分析/列线图研究</p>
-      <button class="help-btn" id="btnHelp">📖 参数详解</button>
+      <button class="help-btn" id="btnHelp" onclick="openHelp()">📖 参数详解</button>
     </div>
     <div class="app-body" id="appBody">
       <!-- Card 1: Demographics + Tear -->
@@ -946,13 +946,13 @@
       </div>
     </div>
 
-    <button class="btn-close" id="btnCloseHelp">关闭</button>
+    <button class="btn-close" id="btnCloseHelp" onclick="closeHelp()">关闭</button>
   </div>
 </div>
 
 <!-- Result Overlay -->
 <div class="result-overlay" id="resultOverlay">
-  <div class="result-backdrop" id="resultBackdrop"></div>
+  <div class="result-backdrop" id="resultBackdrop" onclick="closeResult()"></div>
   <div class="result-sheet" id="resultSheet">
     <div class="sheet-handle"></div>
     <div class="sheet-title">📊 多中心循证风险评估</div>
@@ -990,7 +990,7 @@
       Gu et al. 2023 <em>OJSM</em> (10项) ·
       Hsu et al. 2024 <em>JSES</em> (18项, n=2,700)
     </div>
-    <button class="btn-close" id="btnClose">关闭</button>
+    <button class="btn-close" id="btnClose" onclick="closeResult()">关闭</button>
   </div>
 </div>
 

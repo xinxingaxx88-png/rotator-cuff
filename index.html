@@ -478,9 +478,9 @@
         <div class="form-group">
           <label>肌腱回缩 (Patte 分级)</label>
           <div class="toggle-group" id="patte-group">
-            <div class="toggle-btn active" data-value="1">I 级</div>
-            <div class="toggle-btn" data-value="2">II 级</div>
-            <div class="toggle-btn" data-value="3">III 级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn active" data-value="1">I 级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="2">II 级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="3">III 级</div>
           </div>
           <div class="range-info"><span>I: 无/轻微</span><span>III: 至关节盂 (Hsu 2024: OR 8.0)</span></div>
         </div>
@@ -510,28 +510,28 @@
         <div class="form-group">
           <label>冈上肌 (SSP) <span class="hint">Darbandi 2025: Gr 2 vs 0-1 OR 1.95; Gr 3-4 vs 2 OR 3.37</span></label>
           <div class="toggle-group" id="ssp-fatty">
-            <div class="toggle-btn active" data-value="0">0级</div>
-            <div class="toggle-btn" data-value="1">1级</div>
-            <div class="toggle-btn" data-value="2">2级</div>
-            <div class="toggle-btn" data-value="3">3级</div>
-            <div class="toggle-btn" data-value="4">4级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn active" data-value="0">0级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="1">1级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="2">2级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="3">3级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="4">4级</div>
           </div>
         </div>
         <div class="form-group">
           <label>冈下肌 (ISP) <span class="hint">Darbandi 2025: Gr 2 vs 0-1 OR 2.22; Gr 3-4 vs 2 OR 2.06</span></label>
           <div class="toggle-group" id="isp-fatty">
-            <div class="toggle-btn active" data-value="0">0级</div>
-            <div class="toggle-btn" data-value="1">1级</div>
-            <div class="toggle-btn" data-value="2">2级</div>
-            <div class="toggle-btn" data-value="3">3级</div>
-            <div class="toggle-btn" data-value="4">4级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn active" data-value="0">0级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="1">1级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="2">2级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="3">3级</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="4">4级</div>
           </div>
         </div>
         <div class="form-group">
           <label>切线征 (冈上肌萎缩)</label>
           <div class="toggle-group" id="tangent-group">
-            <div class="toggle-btn active" data-value="negative">阴性</div>
-            <div class="toggle-btn" data-value="positive">阳性</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn active" data-value="negative">阴性</div>
+            <div onclick="this.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" class="toggle-btn" data-value="positive">阳性</div>
           </div>
           <div class="range-info"><span>Hsu 2024: OR 11.1; Hu 2025: OR 1.99</span></div>
         </div>
@@ -1017,22 +1017,7 @@ if (!isDesktop && pf) {
 // Always show the app-container
 document.querySelector('.app-container').style.display = 'flex';
 
-// Toggle groups - iOS compatible
-document.querySelectorAll('.toggle-btn').forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    var g = this.parentElement;
-    g.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-  });
-  btn.addEventListener('touchend', function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    var g = this.parentElement;
-    g.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
+// Toggle groups now use inline onclick - no JS needed
 
 function getToggleVal(id) {
   const g = document.getElementById(id);
